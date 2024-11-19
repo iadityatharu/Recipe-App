@@ -75,3 +75,13 @@ export const generateToken = async (req, res) => {
   });
   res.status(201).json({ message: "New access token is generated" });
 };
+export const logout = async (req, res) => {
+  const incomingRefreshToken = req.cookies.refreshToken;
+  const incomingAccessToken = req.cookies.accessToken;
+  if (!incomingRefreshToken && !incomingAccessToken) {
+    throw new expressError(401, "Invalid Tokens");
+  }
+  res.clearCookie("accessToken", incomingRefreshToken);
+  res.clearCookie("refreshToken", incomingAccessToken);
+  res.status(200).json({ message: "logout successfull" });
+};
