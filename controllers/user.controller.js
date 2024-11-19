@@ -98,3 +98,14 @@ export const sendOtp = async (req, res) => {
     throw new expressError(400, "something went wrong");
   }
 };
+export const forgotPassword = async (req, res) => {
+  const { email, otp, password } = req.body;
+  const response = await forgotPasswordService(email, otp, password);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  } else if (response.status === 403) {
+    throw new expressError(403, "Invalid OTP");
+  } else {
+    return res.status(201).json({ message: "Password reset successfully" });
+  }
+};
