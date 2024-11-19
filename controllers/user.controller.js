@@ -12,3 +12,14 @@ import jwt from "jsonwebtoken";
 import { accessExpiry, refreshExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
+export const signup = async (req, res) => {
+  const validUser = req.validUser;
+  const response = await signupService(validUser);
+  if (response.status === 201) {
+    return res.status(201).json({ message: "New user created successfully" });
+  } else if (response.status == 409) {
+    throw new expressError(409, "User already exists");
+  } else {
+    throw new expressError(400, "Unable to create user");
+  }
+};
