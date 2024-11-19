@@ -41,3 +41,12 @@ export const signin = async (req, res) => {
   });
   return res.status(200).json({ message: "Signin successful" });
 };
+
+export const getUserInfo = async (req, res) => {
+  const userId = req.user.authClaims.id;
+  const response = await getUserInfoService(userId);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  }
+  return res.status(200).json(response);
+};
