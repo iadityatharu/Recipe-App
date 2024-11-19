@@ -23,3 +23,21 @@ export const signup = async (req, res) => {
     throw new expressError(400, "Unable to create user");
   }
 };
+export const signin = async (req, res) => {
+  const validSignin = req.validSignin;
+  const response = await signinService(validSignin);
+  if (response.status === 404) {
+    throw new expressError(404, "User not found");
+  } else if (response.status === 403) {
+    throw new expressError(403, "Unauthorized");
+  }
+  res.cookie("accessToken", response.newAccessToken, {
+    httpOnly: true,
+    expires: accessExpiry,
+  });
+  res.cookie("refreshToken", response.newRefreshToken, {
+    httpOnly: true,
+    expires: refreshExpiry,
+  });
+  return res.status(200).json({ message: "Signin successful" });
+};
