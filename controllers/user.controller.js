@@ -85,3 +85,16 @@ export const logout = async (req, res) => {
   res.clearCookie("refreshToken", incomingAccessToken);
   res.status(200).json({ message: "logout successfull" });
 };
+export const sendOtp = async (req, res) => {
+  const { email } = req.body;
+  const otp = generateOtp();
+  await sendEmail(otp, email);
+  const response = await sendOtpService(otp, email);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  } else if (response.status === 201) {
+    return res.status(201).json({ message: "Otp sent successfully" });
+  } else {
+    throw new expressError(400, "something went wrong");
+  }
+};
