@@ -50,3 +50,12 @@ export const getUserInfo = async (req, res) => {
   }
   return res.status(200).json(response);
 };
+export const updateAddress = async (req, res) => {
+  const userId = req.user.authClaims.id;
+  const { address } = req.body;
+  const response = await updateAddresService(userId, address);
+  if (response.status !== 201) {
+    throw new expressError(400, "Failed to update address");
+  }
+  return res.status(201).json({ message: "Update address successfully" });
+};
