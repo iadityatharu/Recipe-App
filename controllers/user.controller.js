@@ -109,3 +109,21 @@ export const forgotPassword = async (req, res) => {
     return res.status(201).json({ message: "Password reset successfully" });
   }
 };
+export const changePassword = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  const { userId } = jwt.verify(token, process.env.REFRESHTOKEN);
+  const { oldPassword, newPassword } = req.password;
+  const response = await changePasswordService(
+    userId,
+    oldPassword,
+    newPassword
+  );
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  } else if (response.status === 401) {
+    throw new expressError(401, "Invalid credentials");
+  } else {
+    res.clearCookie("refreshToken");
+    res.status(201).json({ message: "password change successfully" });
+  }
+};
