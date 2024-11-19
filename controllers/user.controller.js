@@ -59,3 +59,19 @@ export const updateAddress = async (req, res) => {
   }
   return res.status(201).json({ message: "Update address successfully" });
 };
+export const generateToken = async (req, res) => {
+  const incomingRefreshToken = req.cookies.refreshToken;
+  if (!incomingRefreshToken) {
+    throw new expressError(401, "Invalid Tokens");
+  }
+  const userId = jwt.verify(incomingRefreshToken, process.env.REFRESHTOKEN);
+  const response = await generateTokenService(userId);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  }
+  res.cookie("accessToken", response.newAccessToken, {
+    httpOnly: true,
+    expires: accessExpiry,
+  });
+  res.status(201).json({ message: "New access token is generated" });
+};
