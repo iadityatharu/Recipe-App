@@ -127,3 +127,12 @@ export const changePassword = async (req, res) => {
     res.status(201).json({ message: "password change successfully" });
   }
 };
+export const search = async (req, res) => {
+  const { username, phone, email } = req.body;
+  const response = await searchService(username, phone, email);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  } else {
+    return res.status(200).json(response.user);
+  }
+};
