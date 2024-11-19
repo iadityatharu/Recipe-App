@@ -1,7 +1,7 @@
-export class ExpressError extends Error {
-  constructor(statusCode, message) {
+export const expressError = class expressError extends Error {
+  constructor(status = 500, message = "Internal Server Error") {
     super();
-    this.statusCode = statusCode;
+    this.status = status;
     this.message = message;
   }
-}
+};
