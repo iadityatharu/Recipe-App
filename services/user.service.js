@@ -66,4 +66,12 @@ export const generateToken = async ({ userId }) => {
   const newAccessToken = await accessToken(authClaims);
   return { newAccessToken };
 };
-
+export const sendOtp = async (otp, email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    return { status: 404 };
+  }
+  user.otp = otp;
+  await user.save();
+  return { status: 201 };
+};
