@@ -22,3 +22,7 @@ export const validateUser = Joi.object({
     .max(13)
     .pattern(new RegExp("^(\\+977-?)?(98|97)\\d{8}$")),
 });
+export const validateSignin = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
