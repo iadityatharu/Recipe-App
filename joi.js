@@ -26,3 +26,14 @@ export const validateSignin = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
+export const validateBook = Joi.object({
+  title: Joi.string().required(),
+  author: Joi.string().required(),
+  edition: Joi.string().required(),
+  price: Joi.number().required(),
+  description: Joi.string().required(),
+  language: Joi.string().required(),
+  category: Joi.string().required(),
+  condition: Joi.string().required(),
+  searchTag: Joi.string().required(),
+});
