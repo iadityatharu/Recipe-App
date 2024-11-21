@@ -50,3 +50,7 @@ export const getUserInfo = async (userId) => {
   }
   return data;
 };
+export const updateAddres = async (userId, address) => {
+  await User.findByIdAndUpdate(userId, { address });
+  return { status: 201 };
+};
