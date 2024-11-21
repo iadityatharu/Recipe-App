@@ -54,3 +54,16 @@ export const updateAddres = async (userId, address) => {
   await User.findByIdAndUpdate(userId, { address });
   return { status: 201 };
 };
+export const generateToken = async ({ userId }) => {
+  const user = await User.findById(userId).select("-password");
+  if (!user) {
+    return { status: 404 };
+  }
+  const authClaims = {
+    id: user._id,
+    role: user.role,
+  };
+  const newAccessToken = await accessToken(authClaims);
+  return { newAccessToken };
+};
+
