@@ -49,3 +49,8 @@ export const validateUrl = Joi.object({
       "string.empty": "URL cannot be empty.",
     }),
 });
+export const validateDiscount = Joi.object({
+  name: Joi.string().required(),
+  discountOn: Joi.number().required(),
+  amount: Joi.number().required(),
+});
