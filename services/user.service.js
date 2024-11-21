@@ -92,3 +92,18 @@ export const forgotPassword = async (email, otp, password) => {
   await user.save();
   return { status: 201 };
 };
+export const changePassword = async (userId, oldPassword, newPassword) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    return { status: 404 };
+  }
+  const isValidPassword = await bcrypt.compare(oldPassword, user.password);
+  if (!isValidPassword) {
+    return { status: 401 };
+  }
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashPassword;
+  await user.save();
+
+  return { status: 201 };
+};
