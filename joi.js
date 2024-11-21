@@ -37,3 +37,15 @@ export const validateBook = Joi.object({
   condition: Joi.string().required(),
   searchTag: Joi.string().required(),
 });
+export const validateUrl = Joi.object({
+  urls: Joi.array()
+    .items(Joi.string().uri().required())
+    .max(8)
+    .required()
+    .messages({
+      "array.base": "URLs must be an array.",
+      "array.max": "You can only upload a maximum of 8 URLs.",
+      "string.uri": "Invalid URL format.",
+      "string.empty": "URL cannot be empty.",
+    }),
+});
