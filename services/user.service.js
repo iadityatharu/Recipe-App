@@ -75,3 +75,20 @@ export const sendOtp = async (otp, email) => {
   await user.save();
   return { status: 201 };
 };
+export const forgotPassword = async (email, otp, password) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    return { status: 404 };
+  }
+  // Check if OTP is correct and not expired
+  const isOtpValid = otp === user.otp && user.otpExpiration > Date.now();
+  if (!isOtpValid) {
+    return { status: 403 };
+  }
+  const hashPassword = await bcrypt.hash(password, 10);
+  user.password = hashPassword;
+  user.otp = null;
+  user.otpExpiration = null;
+  await user.save();
+  return { status: 201 };
+};
