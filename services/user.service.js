@@ -41,3 +41,12 @@ export const signin = async (userData) => {
   await existingUser.save();
   return { newAccessToken, newRefreshToken };
 };
+export const getUserInfo = async (userId) => {
+  const data = await User.findById(userId).select(
+    "-password -refreshToken -otp"
+  );
+  if (!data) {
+    return { status: 404 };
+  }
+  return data;
+};
