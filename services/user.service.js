@@ -107,3 +107,13 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
 
   return { status: 201 };
 };
+export const search = async (username, phone, email) => {
+  const user = await User.find({
+    $or: [{ username: username }, { phone: phone }, { email: email }],
+  }).select("-password -refreshToken -otp");
+  if (!user) {
+    return { status: 404 };
+  }
+  return { user };
+};
+
