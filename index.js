@@ -16,8 +16,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//all routes
-app.use("/api/v1/", indexRoute);
+
 // Handle 404 errors
 app.all("*", (req, res, next) => {
   next(new expressError(404, "Page Not Found"));
