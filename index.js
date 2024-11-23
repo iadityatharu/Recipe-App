@@ -9,8 +9,7 @@ import { expressError } from "./utils/expressError.js";
 import { missingVar } from "./function/checkEnv.js";
 import indexRoute from "./routes/index.route.js";
 const app = express();
-//calling the function that check the env variable are available
-missingVar();
+
 //middlewar
 app.use(cookieParser());
 app.use(cors());
