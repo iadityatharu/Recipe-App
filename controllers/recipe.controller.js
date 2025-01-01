@@ -7,7 +7,7 @@ import {
   search as searchService,
   getRecentRecipe as getRecentRecipeService,
   getSpecificRecipe as getSpecificRecipeService,
-} from "../service/book.service.js";
+} from "../services/recipe.service.js";
 export const addRecipe = async (req, res) => {
   const validBook = req.validBook;
   const response = await addRecipeService(validBook);
