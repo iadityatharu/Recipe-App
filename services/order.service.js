@@ -14,7 +14,6 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     payment_method: paymentMethodId,
     confirm: true,
   });
-
   const newOrder = new Order({
     user: userId,
     recipe: recipeId,
