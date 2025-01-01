@@ -34,12 +34,6 @@ export const updateRecipe = async (req, res) => {
   const response = await updateRecipeService(recipeid, req.body);
   return res.status(200).json({ message: response });
 };
-export const updatePrice = async (req, res) => {
-  const { recipeid } = req.headers;
-  const { price } = req.body;
-  const response = await updatePriceService(recipeid, price);
-  return res.status(201).json({ message: response });
-};
 export const deleteRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await deleteRecipeService(recipeid);
