@@ -1,0 +1,28 @@
+import express from "express";
+import { authentication } from "../middleware/userAuth.js";
+import { wrapAsync } from "../util/wrapAsync.js";
+import {
+  addRecipeToFavourite,
+  displayAllFavouriteRecipe,
+  removeRecipeFromFavourite,
+} from "../controller/favourite.controller.js";
+const router = express.Router();
+// add recipe to favourite
+router.put(
+  "/add-recipe-to-favourite",
+  authentication,
+  wrapAsync(addRecipeToFavourite)
+);
+// remove recipe from favourite
+router.put(
+  "/remove-recipe-from-favourite",
+  authentication,
+  wrapAsync(removeRecipeFromFavourite)
+);
+// display all favourite books
+router.get(
+  "/get-favourite-recipes",
+  authentication,
+  wrapAsync(displayAllFavouriteRecipe)
+);
+export default router;
