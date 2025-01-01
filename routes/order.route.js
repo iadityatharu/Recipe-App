@@ -1,5 +1,5 @@
 import express from "express";
-import { authentication } from "../middleware/userAuth.js";
+import { authentication } from "../middleware/authentication.js";
 import { wrapAsync } from "../utils/wrapAsync.js";
 import {
   getAllOrder,

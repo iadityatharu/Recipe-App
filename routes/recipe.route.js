@@ -1,5 +1,5 @@
 import express from "express";
-import { authentication } from "../middleware/userAuth.js";
+import { authentication } from "../middleware/authentication.js";
 import { wrapAsync } from "../utils/wrapAsync.js";
 import {
   addRecipe,
@@ -7,7 +7,6 @@ import {
   getAllRecipe,
   getRecentRecipe,
   getSpecificRecipe,
-  updatePrice,
   search,
   updateRecipe,
 } from "../controllers/recipe.controller.js";
@@ -15,7 +14,6 @@ import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
 router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
-router.patch("/update-price", authentication, isAdmin, wrapAsync(updatePrice));
 router.delete(
   "/delete-recipe",
   authentication,
