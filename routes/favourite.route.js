@@ -1,11 +1,11 @@
 import express from "express";
-import { authentication } from "../middleware/userAuth.js";
-import { wrapAsync } from "../util/wrapAsync.js";
+import { authentication } from "../middleware/authentication.js";
+import { wrapAsync } from "../utils/wrapAsync.js";
 import {
   addRecipeToFavourite,
   displayAllFavouriteRecipe,
   removeRecipeFromFavourite,
-} from "../controller/favourite.controller.js";
+} from "../controllers/favourite.controller.js";
 const router = express.Router();
 // add recipe to favourite
 router.put(
