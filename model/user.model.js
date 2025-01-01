@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-//craeting Schema
+
+// Creating Schema
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -21,8 +22,8 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     password: {
-      required: true,
       type: String,
+      required: true,
       minlength: 8,
     },
     role: {
@@ -30,16 +31,9 @@ const userSchema = new mongoose.Schema(
       default: "user",
       enum: ["admin", "user"],
     },
-
     favourites: [
       {
-        type: mongoose.Types.OnjectId,
-        ref: "recipes",
-      },
-    ],
-    cart: [
-      {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Types.ObjectId, 
         ref: "recipes",
       },
     ],
@@ -52,6 +46,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-// creating Model name User in the reference of userSchema
+
+// Creating Model name User in the reference of userSchema
 const User = mongoose.model("User", userSchema);
 export default User;

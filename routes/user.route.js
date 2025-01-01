@@ -1,7 +1,7 @@
 import express from "express";
-import { wrapAsync } from "../util/wrapAsync.js";
+import { wrapAsync } from "../utils/wrapAsync.js";
 import { validUser } from "../middleware/validate.js";
-import { authentication } from "../middleware/userAuth.js";
+import { authentication } from "../middleware/authentication.js";
 import { changePasswordCheck } from "../middleware/changePasswordCheck.js";
 import {
   signup,
@@ -9,13 +9,12 @@ import {
   getUserInfo,
   updateAddress,
   search,
-  exportToExcel,
   generateToken,
   logout,
   forgotPassword,
   changePassword,
   sendOtp,
-} from "../controller/user.controller.js";
+} from "../controllers/user.controller.js";
 import { checkRefreshToken } from "../middleware/checkRefreshToken.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -34,5 +33,4 @@ router.patch(
 router.post("/send-otp", wrapAsync(sendOtp));
 router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
-router.get("/download-excel", authentication, wrapAsync(exportToExcel));
 export default router;
