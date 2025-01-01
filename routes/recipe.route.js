@@ -1,6 +1,6 @@
 import express from "express";
 import { authentication } from "../middleware/userAuth.js";
-import { wrapAsync } from "../util/wrapAsync.js";
+import { wrapAsync } from "../utils/wrapAsync.js";
 import {
   addRecipe,
   deleteRecipe,
