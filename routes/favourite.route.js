@@ -19,7 +19,7 @@ router.put(
   authentication,
   wrapAsync(removeRecipeFromFavourite)
 );
-// display all favourite books
+// display all favourite recipes
 router.get(
   "/get-favourite-recipes",
   authentication,
