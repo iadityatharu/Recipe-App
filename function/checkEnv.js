@@ -7,6 +7,7 @@ const requiredEnvVar = [
   "MONGO_URL",
   "NODEMAILER_PASS",
   "NODEMAILER_USER",
+  "STRIPE_SECRET_KEY",
 ];
 export const missingVar = () => {
   const missedVar = requiredEnvVar.filter((envVar) => !process.env[envVar]);
