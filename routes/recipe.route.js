@@ -2,39 +2,28 @@ import express from "express";
 import { authentication } from "../middleware/userAuth.js";
 import { wrapAsync } from "../util/wrapAsync.js";
 import {
-  addBook,
-  deleteBook,
-  getAllBook,
-  getRecentBook,
-  getSpecificBook,
+  addRecipe,
+  deleteRecipe,
+  getAllRecipe,
+  getRecentRecipe,
+  getSpecificRecipe,
   updatePrice,
-  updateDiscount,
   search,
-  updateBook,
-  exportToExcel,
-} from "../controller/book.controller.js";
-import { validBook } from "../middleware/validate.js";
+  updateRecipe,
+} from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
-// add book
-router.post(
-  "/add-book",
-  authentication,
-  validBook,
-  isAdmin,
-  wrapAsync(addBook)
-);
-router.put("/update-book", authentication, isAdmin, wrapAsync(updateBook));
+router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
+router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
 router.patch("/update-price", authentication, isAdmin, wrapAsync(updatePrice));
-router.delete("/delete-book", authentication, isAdmin, wrapAsync(deleteBook));
-router.patch(
-  "/update-discount",
+router.delete(
+  "/delete-recipe",
   authentication,
   isAdmin,
-  wrapAsync(updateDiscount)
+  wrapAsync(deleteRecipe)
 );
-router.get("/get-all-book", wrapAsync(getAllBook));
-router.get("/get-recent-book", wrapAsync(getRecentBook));
+router.get("/get-all-recipe", wrapAsync(getAllRecipe));
+router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
-router.get("/get-book-by-id/:id", wrapAsync(getSpecificBook));
+router.get("/get-recipe-by-id/:id", wrapAsync(getSpecificRecipe));
 export default router;
