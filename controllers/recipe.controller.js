@@ -9,8 +9,8 @@ import {
   getSpecificRecipe as getSpecificRecipeService,
 } from "../services/recipe.service.js";
 export const addRecipe = async (req, res) => {
-  const validBook = req.validBook;
-  const response = await addRecipeService(validBook);
+  const { ...validRecipe } = req.body;
+  const response = await addRecipeService(validRecipe);
   return res.status(200).json({ message: response });
 };
 export const updateRecipe = async (req, res) => {
@@ -34,8 +34,8 @@ export const getAllRecipe = async (req, res) => {
   return res.status(200).json({ status: true, data: recipes });
 };
 export const search = async (req, res) => {
-  const { title, price, chef } = req.body;
-  const response = await searchService(title, price, chef);
+  const { title, price } = req.body;
+  const response = await searchService(title, price);
   res.status(200).json({ response });
 };
 export const getRecentRecipe = async (req, res) => {

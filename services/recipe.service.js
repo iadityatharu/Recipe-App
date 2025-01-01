@@ -1,56 +1,50 @@
-import Book from "../model/book.model.js";
-export const addBook = async (bookData) => {
-  const book = new Book({
-    url: bookData.url,
-    title: bookData.title,
-    author: bookData.author,
-    discount: bookData.discount,
-    price: bookData.price,
-    description: bookData.description,
-    languages: bookData.languages,
+import Recipe from "../model/recipe.model.js";
+export const addRecipe = async (recipeData) => {
+  const recipe = new Recipe({
+    url: recipeData.url,
+    title: recipeData.title,
+    price: recipeData.price,
+    description: recipeData.description,
+    process: recipeData.process,
   });
-  await book.save();
+  await recipe.save();
 
-  return "Book added successfully";
+  return "Recipe added successfully";
 };
-export const updateBook = async (bookId, bookData) => {
-  await Book.findByIdAndUpdate(bookId, {
-    url: bookData.url,
-    title: bookData.title,
-    author: bookData.author,
-    price: bookData.price,
-    description: bookData.description,
-    languages: bookData.languages,
+export const updateRecipe = async (recipeId, recipeData) => {
+  await Recipe.findByIdAndUpdate(recipeId, {
+    url: recipeData.url,
+    title: recipeData.title,
+    author: recipeData.author,
+    price: recipeData.price,
+    description: recipeData.description,
+    languages: recipeData.languages,
   });
-  return "Book Updated successfully";
+  return "Recipe Updated successfully";
 };
-export const updatePrice = async (bookId, price) => {
-  await Book.findByIdAndUpdate(bookId, { price });
+export const updatePrice = async (recipeId, price) => {
+  await Recipe.findByIdAndUpdate(recipeId, { price });
   return { message: "Price Updated Successfully" };
 };
-export const deleteBook = async (bookId) => {
-  await Book.findByIdAndDelete(bookId);
-  return "Book Deleted successfully";
+export const deleteRecipe = async (recipeId) => {
+  await Recipe.findByIdAndDelete(recipeId);
+  return "Recipe Deleted successfully";
 };
-export const updateDiscount = async (bookId, discount) => {
-  await Book.findByIdAndUpdate(bookId, { discount });
-  return { message: "Discount Updated successfully" };
+export const getAllRecipe = async () => {
+  const recipes = await Recipe.find().sort({ createdAt: -1 });
+  return recipes;
 };
-export const getAllBook = async () => {
-  const books = await Book.find().sort({ createdAt: -1 });
-  return books;
-};
-export const search = async (title, price, author) => {
-  const response = await Book.find({
-    $or: [{ title: title }, { price: price }, { author: author }],
+export const search = async (title, price) => {
+  const response = await Recipe.find({
+    $or: [{ title: title }, { price: price }],
   }).select("-createdAt -updatedAt");
   return response;
 };
-export const getRecentBook = async () => {
-  const books = await Book.find().sort({ createdAt: -1 }).limit(4);
-  return books;
+export const getRecentRecipe = async () => {
+  const recipes = await Recipe.find().sort({ createdAt: -1 }).limit(4);
+  return recipes;
 };
-export const getSpecificBook = async (id) => {
-  const book = await Book.findById(id);
-  return book;
+export const getSpecificRecipe = async (id) => {
+  const recipe = await Recipe.findById(id);
+  return recipe;
 };
