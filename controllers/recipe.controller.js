@@ -8,8 +8,24 @@ import {
   getRecentRecipe as getRecentRecipeService,
   getSpecificRecipe as getSpecificRecipeService,
 } from "../services/recipe.service.js";
+import { imageUploadUtil } from "../config/cloudinary.config.js";
 export const addRecipe = async (req, res) => {
-  const { ...validRecipe } = req.body;
+  const { title, description, price, ingredients, steps } = req.body;
+  // Handle image uploads (if any)
+  const uploadedImages = req.files; // Files are attached via the 'images' field in the form
+  let imageUrls = [];
+  if (uploadedImages && uploadedImages.length > 0) {
+    // Upload images to Cloudinary and get their URLs
+    imageUrls = await imageUploadUtil(uploadedImages);
+  }
+  const validRecipe = {
+    title,
+    description,
+    price,
+    ingredients,
+    steps,
+    images: imageUrls, // Add the Cloudinary image URLs to the recipe
+  };
   const response = await addRecipeService(validRecipe);
   return res.status(200).json({ message: response });
 };
