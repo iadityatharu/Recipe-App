@@ -32,8 +32,8 @@ export const updateOrderAdmin = async (req, res) => {
   return res.status(200).json({ message: response.message });
 };
 export const search = async (req, res) => {
-  const { username, book, phone, address, status } = req.body;
-  const response = await searchService(username, book, phone, address, status);
+  const { username, recipe, phone, address, status } = req.body;
+  const response = await searchService(username, recipe, phone, address, status);
   res.status(200).json({ response });
 };
 export const exportToExcel = async (req, res) => {
