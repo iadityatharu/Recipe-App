@@ -15,10 +15,9 @@ export const updateRecipe = async (recipeId, recipeData) => {
   await Recipe.findByIdAndUpdate(recipeId, {
     url: recipeData.url,
     title: recipeData.title,
-    author: recipeData.author,
     price: recipeData.price,
     description: recipeData.description,
-    languages: recipeData.languages,
+    process: recipeData.process,
   });
   return "Recipe Updated successfully";
 };
