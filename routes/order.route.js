@@ -5,7 +5,6 @@ import {
   getAllOrder,
   orderHistory,
   placeOrder,
-  exportToExcel,
   search,
   updateOrderAdmin,
 } from "../controllers/order.controller.js";
