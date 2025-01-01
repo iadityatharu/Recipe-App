@@ -1,19 +1,19 @@
 import User from "../model/user.model.js";
-export const addFavourite = async (bookid, userId) => {
+export const addFavourite = async (recipeid, userId) => {
   const userData = await User.findById(userId);
-  const isBookFavourite = userData.favourites.includes(bookid);
-  if (isBookFavourite) {
-    return "Book is already in favourite list";
+  const isRecipeFavourite = userData.favourites.includes(recipeid);
+  if (isRecipeFavourite) {
+    return "Recipe is already in favourite list";
   }
-  await User.findByIdAndUpdate(userId, { $push: { favourites: bookid } });
-  return "Book is added to favourites";
+  await User.findByIdAndUpdate(userId, { $push: { favourites: recipeid } });
+  return "Recipe is added to favourites";
 };
-export const removeFavourite = async (bookid, userId) => {
+export const removeFavourite = async (recipeid, userId) => {
   const userData = await User.findById(userId);
-  const isBookFavourite = userData.favourites.includes(bookid);
-  if (isBookFavourite) {
-    await User.findByIdAndUpdate(userId, { $pull: { favourites: bookid } });
-    return "Book removed from favourites";
+  const isRecipeFavourite = userData.favourites.includes(recipeid);
+  if (isRecipeFavourite) {
+    await User.findByIdAndUpdate(userId, { $pull: { favourites: recipeid } });
+    return "Recipe removed from favourites";
   }
 };
 export const displayAllFavourite = async (userId) => {
