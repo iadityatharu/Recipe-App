@@ -24,8 +24,11 @@ export const signup = async (req, res) => {
   }
 };
 export const signin = async (req, res) => {
-  const validSignin = req.validSignin;
-  const response = await signinService(validSignin);
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new expressError(400, "Credentials required");
+  }
+  const response = await signinService({ email, password });
   if (response.status === 404) {
     throw new expressError(404, "User not found");
   } else if (response.status === 403) {

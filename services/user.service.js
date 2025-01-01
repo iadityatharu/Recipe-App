@@ -16,12 +16,12 @@ export const signup = async (validUser) => {
     address,
     phone,
     password: hashPassword,
-    ...(middlename && { middlename }), 
+    ...(middlename && { middlename }),
   });
   await newUser.save();
   return { status: 201 };
 };
-export const signin = async (userData) => {
+export const signin = async ({ email, password }) => {
   const { email, password } = userData;
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
@@ -116,4 +116,3 @@ export const search = async (username, phone, email) => {
   }
   return { user };
 };
-
