@@ -1,10 +1,4 @@
-import {
-  validateUser,
-  validateUrl,
-  validateBook,
-  validateSignin,
-  validateDiscount,
-} from "../joi.js";
+import { validateUser } from "../joi.js";
 import { expressError } from "../utils/expressError.js";
 export const validUser = async (req, res, next) => {
   try {
