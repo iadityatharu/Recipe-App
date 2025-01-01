@@ -1,29 +1,26 @@
 import Recipe from "../model/recipe.model.js";
 export const addRecipe = async (recipeData) => {
+  const { title, description, price, process, images } = recipeData;
   const recipe = new Recipe({
-    url: recipeData.url,
-    title: recipeData.title,
-    price: recipeData.price,
-    description: recipeData.description,
-    process: recipeData.process,
+    title,
+    price,
+    description,
+    process,
+    images,
   });
   await recipe.save();
-
   return "Recipe added successfully";
 };
 export const updateRecipe = async (recipeId, recipeData) => {
+  const { title, description, price, process, images } = recipeData;
   await Recipe.findByIdAndUpdate(recipeId, {
-    url: recipeData.url,
-    title: recipeData.title,
-    price: recipeData.price,
-    description: recipeData.description,
-    process: recipeData.process,
+    title,
+    price,
+    description,
+    process,
+    images,
   });
-  return "Recipe Updated successfully";
-};
-export const updatePrice = async (recipeId, price) => {
-  await Recipe.findByIdAndUpdate(recipeId, { price });
-  return { message: "Price Updated Successfully" };
+  return "Recipe updated successfully";
 };
 export const deleteRecipe = async (recipeId) => {
   await Recipe.findByIdAndDelete(recipeId);

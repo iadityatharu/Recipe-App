@@ -1,18 +1,11 @@
 import mongoose from "mongoose";
 const recipeSchema = new mongoose.Schema(
   {
-    url: {
-      default:
-        "https://asset.cloudinary.com/do5qodail/777c98c7b446fbccc0f9e45d9acbe8c2",
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
     },
     price: {
-      default: 0,
       type: Number,
       required: true,
     },
@@ -24,8 +17,13 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    images: {
+      type: [String],
+      required: false,
+    },
   },
   { timestamps: true }
 );
-const Recipe = mongoose.model("Recipes", recipeSchema);
+const Recipe = mongoose.model("Recipe", recipeSchema);
+
 export default Recipe;
