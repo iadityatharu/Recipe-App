@@ -4,10 +4,7 @@ import {
   getAllOrder as getAllOrderService,
   updateOrder as updateOrderService,
   search as searchService,
-  exportToExcel as exportToExcelService,
-} from "../service/order.service.js";
-import excelJS from "exceljs";
-import { expressError } from "../util/expressError.js";
+} from "../services/order.service.js";
 export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { order } = req.body;
@@ -33,41 +30,12 @@ export const updateOrderAdmin = async (req, res) => {
 };
 export const search = async (req, res) => {
   const { username, recipe, phone, address, status } = req.body;
-  const response = await searchService(username, recipe, phone, address, status);
-  res.status(200).json({ response });
-};
-export const exportToExcel = async (req, res) => {
-  const response = await exportToExcelService();
-  if (!response) {
-    throw new expressError(404, "No Data Found!");
-  }
-  const workbook = new excelJS.Workbook();
-  const worksheet = workbook.addWorksheet("My Orders");
-  worksheet.columns = [
-    { header: "S no.", key: "s_no", width: 5 },
-    { header: "Username", key: "username", width: 20 },
-    { header: "Address", key: "address", width: 20 },
-    { header: "Phone", key: "phone", width: 10 },
-    { header: "Book", key: "book", width: 15 },
-    { header: "Total", key: "total", width: 8 },
-    { header: "Discount", key: "key", width: 8 },
-    { header: "Status", key: "status", width: 10 },
-  ];
-  let counter = 1;
-  response.forEach((order) => {
-    order.s_no = counter;
-    worksheet.addRow(order);
-    counter++;
-  });
-  worksheet.getRow(1).eachCell((cell) => {
-    cell.font = { bold: true };
-  });
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  const response = await searchService(
+    username,
+    recipe,
+    phone,
+    address,
+    status
   );
-  res.setHeader("Content-Disposition", `attachment; filename=users.xlsx`);
-  return workbook.xlsx.write(res).then(() => {
-    res.status(200).json({ message: "Download successfull" });
-  });
+  res.status(200).json({ response });
 };
