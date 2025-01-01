@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import { connection } from "./config/connection.config.js";
 import { expressError } from "./utils/expressError.js";
 import { missingVar } from "./function/checkEnv.js";
-import indexRoute from "./routes/index.route.js";
+import indexRoute from "./routes/wraperRoute.route.js";
 const app = express();
 //calling the function that check the env variable are available
 missingVar();
