@@ -22,35 +22,4 @@ export const validateUser = Joi.object({
     .max(13)
     .pattern(new RegExp("^(\\+977-?)?(98|97)\\d{8}$")),
 });
-export const validateSignin = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-});
-export const validateBook = Joi.object({
-  title: Joi.string().required(),
-  author: Joi.string().required(),
-  edition: Joi.string().required(),
-  price: Joi.number().required(),
-  description: Joi.string().required(),
-  language: Joi.string().required(),
-  category: Joi.string().required(),
-  condition: Joi.string().required(),
-  searchTag: Joi.string().required(),
-});
-export const validateUrl = Joi.object({
-  urls: Joi.array()
-    .items(Joi.string().uri().required())
-    .max(8)
-    .required()
-    .messages({
-      "array.base": "URLs must be an array.",
-      "array.max": "You can only upload a maximum of 8 URLs.",
-      "string.uri": "Invalid URL format.",
-      "string.empty": "URL cannot be empty.",
-    }),
-});
-export const validateDiscount = Joi.object({
-  name: Joi.string().required(),
-  discountOn: Joi.number().required(),
-  amount: Joi.number().required(),
-});
+
