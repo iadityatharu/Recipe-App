@@ -1,7 +1,6 @@
 import {
   addRecipe as addRecipeService,
   updateRecipe as updateRecipeService,
-  updatePrice as updatePriceService,
   deleteRecipe as deleteRecipeService,
   getAllRecipe as getAllRecipeService,
   search as searchService,
