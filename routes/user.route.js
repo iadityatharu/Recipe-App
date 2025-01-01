@@ -1,6 +1,6 @@
 import express from "express";
 import { wrapAsync } from "../util/wrapAsync.js";
-import { validSignin, validUser } from "../middleware/validate.js";
+import { validUser } from "../middleware/validate.js";
 import { authentication } from "../middleware/userAuth.js";
 import { changePasswordCheck } from "../middleware/changePasswordCheck.js";
 import {
@@ -20,7 +20,7 @@ import { checkRefreshToken } from "../middleware/checkRefreshToken.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
 router.post("/signup", validUser, wrapAsync(signup));
-router.post("/signin", validSignin, wrapAsync(signin));
+router.post("/signin", wrapAsync(signin));
 router.get("/get-user-information", authentication, wrapAsync(getUserInfo));
 router.patch("/update-address", authentication, wrapAsync(updateAddress));
 router.post("/refresh-token", checkRefreshToken, wrapAsync(generateToken));
