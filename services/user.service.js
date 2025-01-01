@@ -22,7 +22,6 @@ export const signup = async (validUser) => {
   return { status: 201 };
 };
 export const signin = async ({ email, password }) => {
-  const { email, password } = userData;
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
     return { status: 404 };
