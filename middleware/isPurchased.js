@@ -17,4 +17,4 @@ const isPurchased = async (req, res, next) => {
   }
 };
 
-export default checkRecipePurchase;
+export default isPurchased;

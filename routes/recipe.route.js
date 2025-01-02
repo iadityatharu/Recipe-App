@@ -11,6 +11,7 @@ import {
   updateRecipe,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
+import isPurchased from "../middleware/isPurchased.js";
 const router = express.Router();
 router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
@@ -25,7 +26,7 @@ router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
 router.get(
   "/get-recipe-by-id/:id",
-  authentication,
+  authentication,isPurchased,
   wrapAsync(getSpecificRecipe)
 );
 export default router;
