@@ -23,5 +23,9 @@ router.delete(
 router.get("/get-all-recipe", wrapAsync(getAllRecipe));
 router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
-router.get("/get-recipe-by-id/:id", wrapAsync(getSpecificRecipe));
+router.get(
+  "/get-recipe-by-id/:id",
+  authentication,
+  wrapAsync(getSpecificRecipe)
+);
 export default router;

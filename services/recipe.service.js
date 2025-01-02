@@ -27,7 +27,9 @@ export const deleteRecipe = async (recipeId) => {
   return "Recipe Deleted successfully";
 };
 export const getAllRecipe = async () => {
-  const recipes = await Recipe.find().sort({ createdAt: -1 });
+  const recipes = await Recipe.find()
+    .select("images title price")
+    .sort({ createdAt: -1 });
   return recipes;
 };
 export const search = async (title, price) => {
@@ -37,7 +39,10 @@ export const search = async (title, price) => {
   return response;
 };
 export const getRecentRecipe = async () => {
-  const recipes = await Recipe.find().sort({ createdAt: -1 }).limit(4);
+  const recipes = await Recipe.find()
+    .select("images title price")
+    .sort({ createdAt: -1 })
+    .limit(4);
   return recipes;
 };
 export const getSpecificRecipe = async (id) => {
