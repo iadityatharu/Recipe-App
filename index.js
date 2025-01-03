@@ -27,7 +27,7 @@ const rateLimit = limitter({
     });
   },
 });
-app.use("/api/v1", rateLimit);
+
 //all routes
 app.use("/api/v1/", indexRoute);
 // Handle 404 errors
