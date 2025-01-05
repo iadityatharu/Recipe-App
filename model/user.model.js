@@ -53,7 +53,5 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Creating Model name User in the reference of userSchema
 const User = mongoose.model("User", userSchema);
 export default User;
