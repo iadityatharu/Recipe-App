@@ -41,6 +41,8 @@ app.use((err, req, res, next) => {
   // console.error(`Error: ${message}, Status Code: ${status}`, err);
   res.status(status).json({ message });
 });
+// Establish database connection
+connection();
 // Start server
 const PORT = process.env.PORT || 5431;
 app.listen(PORT, () => {
