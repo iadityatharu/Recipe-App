@@ -1,4 +1,4 @@
-import Order from "../model/order.model.js"; // Adjust the path to your Order model
+import Order from "../model/order.model.js"; 
 
 const isPurchased = async (req, res, next) => {
   try {
