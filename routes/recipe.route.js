@@ -12,6 +12,7 @@ import {
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import isPurchased from "../middleware/isPurchased.js";
+import{ upload} from "../config/cloudinary.config.js";
 const router = express.Router();
 router.post(
   "/add-recipe",
