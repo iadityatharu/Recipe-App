@@ -13,7 +13,13 @@ import {
 import { isAdmin } from "../middleware/isAdmin.js";
 import isPurchased from "../middleware/isPurchased.js";
 const router = express.Router();
-router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
+router.post(
+  "/add-recipe",
+  authentication,
+  isAdmin,
+  upload.array("images", 8),
+  wrapAsync(addRecipe)
+);
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
 router.delete(
   "/delete-recipe",
@@ -26,7 +32,8 @@ router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
 router.get(
   "/get-recipe-by-id/:id",
-  authentication,isPurchased,
+  authentication,
+  isPurchased,
   wrapAsync(getSpecificRecipe)
 );
 export default router;
