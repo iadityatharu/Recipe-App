@@ -6,7 +6,7 @@ import {
   search as searchService,
 } from "../services/order.service.js";
 import { expressError } from "../utils/expressError.js";
-export const placeOrder = async (req, res, next) => {
+export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { recipeId, paymentMethodId } = req.body;
   if (!recipeId || !paymentMethodId) {
@@ -19,7 +19,7 @@ export const placeOrder = async (req, res, next) => {
     orderId: response.orderId,
   });
 };
-export const orderHistory = async (req, res, next) => {
+export const orderHistory = async (req, res) => {
   const userId = req.user.authClaims.id;
   const ordersData = await orderHistoryService(userId);
   if (!ordersData) {
@@ -28,7 +28,7 @@ export const orderHistory = async (req, res, next) => {
   return res.status(200).json({ status: true, data: ordersData });
 };
 // Controller to get all orders (admin)
-export const getAllOrder = async (req, res, next) => {
+export const getAllOrder = async (req, res) => {
   const orders = await getAllOrderService();
   if (!orders || orders.length === 0) {
     throw new expressError(404, "No orders found");
@@ -36,7 +36,7 @@ export const getAllOrder = async (req, res, next) => {
   return res.status(200).json({ status: true, orders });
 };
 // Controller to update order status (admin)
-export const updateOrderAdmin = async (req, res, next) => {
+export const updateOrderAdmin = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   if (!id || !status) {
@@ -45,7 +45,7 @@ export const updateOrderAdmin = async (req, res, next) => {
   const response = await updateOrderService(id, status);
   return res.status(200).json({ message: response.message });
 };
-export const search = async (req, res, next) => {
+export const search = async (req, res) => {
   const { username, recipe, phone, address, status } = req.body;
   if (!username && !recipe && !phone && !address && !status) {
     throw new expressError(400, "At least one search parameter is required");
