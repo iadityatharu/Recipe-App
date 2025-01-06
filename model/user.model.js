@@ -50,8 +50,13 @@ const userSchema = new mongoose.Schema(
         ref: "recipes",
       },
     ],
+    otpExpiration: {
+      type: Date,
+      default: () => new Date(Date.now() + 2 * 60 * 1000), // Default to 2 minutes from now
+    },
   },
   { timestamps: true }
 );
+
 const User = mongoose.model("User", userSchema);
 export default User;
