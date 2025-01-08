@@ -25,4 +25,5 @@ const imageUploadUtil = async (files) => {
     throw new expressError(400, "Unable to upload image.");
   }
 };
-
+const upload = multer({ storage });
+export { upload, imageUploadUtil };
