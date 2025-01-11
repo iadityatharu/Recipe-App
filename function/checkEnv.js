@@ -13,10 +13,3 @@ const requiredEnvVar = [
   "CLOUDINARY_API_SECRET",
   "STRIPE_SECRET_KEY",
 ];
-export const missingVar = () => {
-  const missedVar = requiredEnvVar.filter((envVar) => !process.env[envVar]);
-  if (missedVar.length > 0) {
-    console.log("variable is missing in env file: ", missedVar);
-    process.exit(1);
-  }
-};
