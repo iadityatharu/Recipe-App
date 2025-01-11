@@ -11,7 +11,6 @@ const requiredEnvVar = [
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
-  "STRIPE_SECRET_KEY",
 ];
 export const missingVar = () => {
   const missedVar = requiredEnvVar.filter((envVar) => !process.env[envVar]);
