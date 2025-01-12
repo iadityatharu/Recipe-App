@@ -105,7 +105,7 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
 
   return { status: 201 };
 };
-export const search = async ({ firstname, lastname, phone, email }) => {
+export const search = async (firstname, lastname, phone, email) => {
   const query = {
     $or: [],
   };
