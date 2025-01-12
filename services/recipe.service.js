@@ -8,9 +8,9 @@ export const addRecipe = async (recipeData) => {
     title,
     description,
     price,
-    ingredients, // Includes structured ingredient data
-    process, // Includes structured cooking process steps
-    images, // Includes uploaded or default image URLs
+    ingredients, 
+    process, 
+    images, 
   });
   await recipe.save();
   return "Recipe added successfully";
