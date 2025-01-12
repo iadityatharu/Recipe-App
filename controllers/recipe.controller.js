@@ -11,19 +11,16 @@ import { expressError } from "../utils/expressError.js";
 import { imageUploadUtil } from "../config/cloudinary.config.js";
 export const addRecipe = async (req, res) => {
   const { title, description, price, ingredients, process } = req.body;
-  // Handle image uploads (if any)
-  const uploadedImages = req.files; // Files are attached via the 'images' field in the form
+  const uploadedImages = req.files;
   let imageUrls = [];
   if (uploadedImages && uploadedImages.length > 0) {
     // Upload images to Cloudinary and get their URLs
     imageUrls = await imageUploadUtil(uploadedImages);
   } else {
-    // Use the default image if no images are uploaded
     imageUrls = [
       "https://www.gettyimages.com/detail/photo/men-eating-vegan-creamy-roasted-pumpkin-soup-royalty-free-image/1197494143",
     ];
   }
-
   // Validate ingredients and process input
   const formattedIngredients = JSON.parse(ingredients).map((ingredient) => {
     if (!ingredient.name || !ingredient.quantity || !ingredient.unit) {
@@ -31,7 +28,6 @@ export const addRecipe = async (req, res) => {
     }
     return ingredient;
   });
-
   const formattedProcess = JSON.parse(process).map((step, index) => {
     if (!step.description) {
       throw new expressError(400, "Each process step must have a description.");
