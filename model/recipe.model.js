@@ -34,7 +34,7 @@ const recipeSchema = new mongoose.Schema(
       required: true,
     },
     images: {
-      type: [String], // URLs or paths to recipe images
+      type: [String],
       required: false,
     },
   },
