@@ -9,28 +9,49 @@ import {
 } from "../services/recipe.service.js";
 import { imageUploadUtil } from "../config/cloudinary.config.js";
 export const addRecipe = async (req, res) => {
-  const { title, description, price, ingredients, process } = req.body;
-  const uploadedImages = req.files;
-  let imageUrls = [];
-  if (uploadedImages && uploadedImages.length > 0) {
-    // Upload images to Cloudinary and get their URLs
-    imageUrls = await imageUploadUtil(uploadedImages);
-  } else {
-    imageUrls = [
-      "https://www.gettyimages.com/detail/photo/men-eating-vegan-creamy-roasted-pumpkin-soup-royalty-free-image/1197494143",
-    ];
+  try {
+    const { title, description, price, ingredients, process, images } =
+      req.body;
+    let imageUrls = [];
+
+    // Handle uploaded image files
+    const uploadedImages = req.files;
+    if (uploadedImages && uploadedImages.length > 0) {
+      // Upload images to Cloudinary and get their URLs
+      const uploadedImageUrls = await imageUploadUtil(uploadedImages);
+      imageUrls = [...uploadedImageUrls];
+    }
+
+    // Handle image URLs provided in the JSON body
+    if (images && Array.isArray(images) && images.length > 0) {
+      imageUrls = [...imageUrls, ...images];
+    }
+
+    // Default image if no images are provided
+    if (imageUrls.length === 0) {
+      imageUrls = [
+        "https://www.gettyimages.com/detail/photo/men-eating-vegan-creamy-roasted-pumpkin-soup-royalty-free-image/1197494143",
+      ];
+    }
+
+    const validRecipe = {
+      title,
+      description,
+      price,
+      ingredients,
+      process,
+      images: imageUrls,
+    };
+
+    const response = await addRecipeService(validRecipe);
+    return res
+      .status(200)
+      .json({ message: "Recipe added successfully", data: response });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
-  const validRecipe = {
-    title,
-    description,
-    price,
-    ingredients,
-    process,
-    images: imageUrls,
-  };
-  const response = await addRecipeService(validRecipe);
-  return res.status(200).json({ message: response });
 };
+
 export const updateRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await updateRecipeService(recipeid, req.body);
