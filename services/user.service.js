@@ -105,12 +105,17 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
 
   return { status: 201 };
 };
-export const search = async (username, phone, email) => {
-  const user = await User.find({
-    $or: [{ username: username }, { phone: phone }, { email: email }],
-  }).select("-password -refreshToken -otp");
-  if (!user) {
-    return { status: 404 };
+export const search = async (firstname, lastname, phone, email) => {
+  const query = {
+    $or: [],
+  };
+  if (phone) query.$or.push({ phone: phone });
+  if (email) query.$or.push({ email: email });
+  if (firstname) query.$or.push({ firstname: firstname });
+  if (lastname) query.$or.push({ lastname: lastname });
+  const users = await User.find(query).select("-password -refreshToken -otp");
+  if (users.length === 0) {
+    return { status: 404, message: "No users found." };
   }
-  return { user };
+  return { users };
 };

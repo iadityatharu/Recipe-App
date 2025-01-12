@@ -131,8 +131,8 @@ export const changePassword = async (req, res) => {
   }
 };
 export const search = async (req, res) => {
-  const { username, phone, email } = req.body;
-  const response = await searchService(username, phone, email);
+  const { firstname, lastname, phone, email } = req.body;
+  const response = await searchService(firstname, lastname, phone, email);
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   } else {
