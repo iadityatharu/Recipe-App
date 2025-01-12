@@ -10,7 +10,6 @@ import {
 import { imageUploadUtil } from "../config/cloudinary.config.js";
 export const addRecipe = async (req, res) => {
   const { title, description, price, ingredients, process } = req.body;
-  // Handle image uploads
   const uploadedImages = req.files;
   let imageUrls = [];
   if (uploadedImages && uploadedImages.length > 0) {
