@@ -34,7 +34,7 @@ const recipeSchema = new mongoose.Schema(
       required: true,
     },
     images: {
-      type: [String],
+      type: String,
       default:
         "https://www.gettyimages.com/detail/photo/men-eating-vegan-creamy-roasted-pumpkin-soup-royalty-free-image/1197494143",
       required: true,
