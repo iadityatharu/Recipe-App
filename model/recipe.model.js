@@ -27,7 +27,7 @@ const recipeSchema = new mongoose.Schema(
     process: {
       type: [
         {
-          step_number: { type: Number, required: true }, // Step number for ordering
+          step_number: { type: Number, required: true }, 
           description: { type: String, required: true }, // Detailed description of the step
         },
       ],
