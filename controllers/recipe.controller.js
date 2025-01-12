@@ -49,7 +49,6 @@ export const addRecipe = async (req, res) => {
     process: formattedProcess,
     images: imageUrls,
   };
-  // Call the service to add the recipe
   const response = await addRecipeService(validRecipe);
   return res
     .status(200)
