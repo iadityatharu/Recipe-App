@@ -1,8 +1,6 @@
 import multer from "multer";
 import { expressError } from "../utils/expressError.js";
-import { imageUploadUtil } from "../config/cloudinary.config.js"; // Assumes Cloudinary is configured in this file
-
-// Configure Multer to use memory storage
+import { imageUploadUtil } from "../config/cloudinary.config.js";
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
