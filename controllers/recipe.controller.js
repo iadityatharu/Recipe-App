@@ -46,9 +46,7 @@ export const addRecipe = async (req, res) => {
     images: imageUrls,
   };
   const response = await addRecipeService(validRecipe);
-  return res
-    .status(200)
-    .json({ message: "Recipe added successfully", data: response });
+  return res.status(200).json({ message: "Recipe added successfully" });
 };
 
 export const updateRecipe = async (req, res) => {
