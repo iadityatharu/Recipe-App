@@ -1,7 +1,6 @@
 import cloudinary from "cloudinary";
 import streamifier from "streamifier";
 import { expressError } from "../utils/expressError.js";
-
 // Configure Cloudinary
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -41,7 +40,6 @@ const imageUploadUtil = async (file) => {
         )
         .end(stream);
     });
-
     return uploadResult.secure_url; // Return the URL of the uploaded image
   } catch (error) {
     throw new expressError(500, `Error uploading image: ${error.message}`);
