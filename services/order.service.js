@@ -33,7 +33,6 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     paymentStatus: paymentIntent.status,
   };
 };
-
 export const orderHistory = async (userId) => {
   const userData = await User.findById(userId)
     .sort({ createdAt: -1 })
@@ -43,17 +42,14 @@ export const orderHistory = async (userId) => {
     });
   return userData.orders.reverse();
 };
-
 export const getAllOrder = async () => {
   const orders = await Order.find({}).sort({ createdAt: -1 });
   return orders;
 };
-
 export const updateOrder = async (orderId, status) => {
   await Order.findByIdAndUpdate(orderId, { status });
   return { message: "Status updated successfully" };
 };
-
 export const search = async (username, recipe, phone, address, status) => {
   const order = await Order.find({
     $or: [
