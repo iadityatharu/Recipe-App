@@ -1,16 +1,21 @@
 import Recipe from "../model/recipe.model.js";
 export const addRecipe = async (recipeData) => {
-  const { title, description, price, process, images } = recipeData;
+  const { title, description, price, ingredients, process, images } =
+    recipeData;
+
+  // Create a new Recipe document
   const recipe = new Recipe({
     title,
-    price,
     description,
-    process,
-    images,
+    price,
+    ingredients, // Includes structured ingredient data
+    process, // Includes structured cooking process steps
+    images, // Includes uploaded or default image URLs
   });
   await recipe.save();
   return "Recipe added successfully";
 };
+
 export const updateRecipe = async (recipeId, recipeData) => {
   const { title, description, price, process, images } = recipeData;
   await Recipe.findByIdAndUpdate(recipeId, {
