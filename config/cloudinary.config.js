@@ -9,6 +9,7 @@ cloudinary.v2.config({
 });
 const imageUploadUtil = async (file) => {
   try {
+    console.log(file);
     if (!file || !file.buffer) {
       throw new expressError(400, "No valid file provided for upload.");
     }
@@ -22,7 +23,7 @@ const imageUploadUtil = async (file) => {
           {
             resource_type: "image",
             folder: "recipe_images",
-            public_id: `${Date.now()}-${file.originalname}`, 
+            public_id: `${Date.now()}-${file.originalname}`,
             overwrite: true,
           },
           (error, result) => {
