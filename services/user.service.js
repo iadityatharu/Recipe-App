@@ -87,7 +87,6 @@ export const forgotPassword = async (email, otp, password) => {
   const hashPassword = await bcrypt.hash(password, 10);
   user.password = hashPassword;
   user.otp = null;
-  user.otpExpiration = null;
   await user.save();
   return { status: 201 };
 };
