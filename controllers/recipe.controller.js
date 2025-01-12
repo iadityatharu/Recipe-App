@@ -32,7 +32,6 @@ export const addRecipe = async (req, res) => {
   const response = await addRecipeService(validRecipe);
   return res.status(200).json({ message: response });
 };
-
 export const updateRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await updateRecipeService(recipeid, req.body);
