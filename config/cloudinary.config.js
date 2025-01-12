@@ -47,5 +47,4 @@ const imageUploadUtil = async (file) => {
     throw new expressError(500, `Error uploading image: ${error.message}`);
   }
 };
-
 export { imageUploadUtil };
