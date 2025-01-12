@@ -1,8 +1,6 @@
 import multer from "multer";
 import { expressError } from "../utils/expressError.js";
-// Configure Multer storage (memory storage for file buffer)
 const storage = multer.memoryStorage();
-// Set up Multer middleware for single image upload
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
