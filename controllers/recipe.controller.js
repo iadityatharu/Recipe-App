@@ -7,55 +7,33 @@ import {
   getRecentRecipe as getRecentRecipeService,
   getSpecificRecipe as getSpecificRecipeService,
 } from "../services/recipe.service.js";
-import { imageUploadUtil } from "../config/cloudinary.config.js";
+import { expressError } from "../utils/expressError.js";
 export const addRecipe = async (req, res) => {
-  const { title, description, price, ingredients, process, images } = req.body;
-  const uploadedFile = req.file;
+  const { title, description, price, ingredients, process } = req.body;
+  // Ensure required fields are provided
   if (!title || !description || !price) {
-    return res
-      .status(400)
-      .json({ message: "Title, description, and price are required." });
+    throw new expressError(400, "Title, description, and price are required");
   }
-  let imageUrls = [];
-  if (uploadedFile) {
-    try {
-      const uploadedImageUrl = await imageUploadUtil(uploadedFile);
-      imageUrls.push(uploadedImageUrl);
-    } catch (error) {
-      console.error("[addRecipe] Error uploading image:", error.message);
-      return res
-        .status(400)
-        .json({ message: `Image upload failed: ${error.message}` });
-    }
-  }
-
-  if (images) {
-    const providedImageUrls = Array.isArray(images) ? images : [images];
-    imageUrls = [...imageUrls, ...providedImageUrls];
-  }
-
-  const parsedIngredients = ingredients
-    ? Array.isArray(ingredients)
-      ? ingredients
-      : JSON.parse(ingredients)
-    : [];
-  const parsedProcess = process
-    ? Array.isArray(process)
-      ? process
-      : JSON.parse(process)
-    : [];
-  const validRecipe = {
+  // Use the uploaded image URL from the middleware
+  const imageUrl = req.imageUrl;
+  // Parse ingredients and process if provided as strings
+  const parsedIngredients = Array.isArray(ingredients)
+    ? ingredients
+    : JSON.parse(ingredients || "[]");
+  const parsedProcess = Array.isArray(process)
+    ? process
+    : JSON.parse(process || "[]");
+  const recipeData = {
     title,
     description,
     price,
     ingredients: parsedIngredients,
     process: parsedProcess,
-    images: imageUrls,
+    imageUrl, // Add image URL
   };
-  const response = await addRecipeService(validRecipe);
-  return res
-    .status(200)
-    .json({ message: "Recipe added successfully", data: response });
+  // Save the recipe using the service
+  const response = await addRecipeService(recipeData);
+  return res.status(201).json({ message: response });
 };
 export const updateRecipe = async (req, res) => {
   const { recipeid } = req.headers;

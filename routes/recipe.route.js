@@ -12,7 +12,7 @@ import {
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import isPurchased from "../middleware/isPurchased.js";
-
+import { upload, uploadImageHandler } from "../config/cloudinary.config.js";
 const router = express.Router();
 router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
@@ -20,6 +20,8 @@ router.delete(
   "/delete-recipe",
   authentication,
   isAdmin,
+  upload,
+  uploadImageHandler,
   wrapAsync(deleteRecipe)
 );
 router.get("/get-all-recipe", wrapAsync(getAllRecipe));
