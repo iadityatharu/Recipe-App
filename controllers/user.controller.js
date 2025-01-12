@@ -135,7 +135,6 @@ export const search = async (req, res) => {
   const response = await searchService(firstname, lastname, phone, email);
   if (response.status === 404) {
     throw new expressError(404, "user not found");
-  } else {
-    return res.status(200).json(response.user);
   }
+  return res.status(200).json({ users: response.users });
 };
