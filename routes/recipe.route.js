@@ -12,15 +12,9 @@ import {
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import isPurchased from "../middleware/isPurchased.js";
-import{ upload} from "../config/cloudinary.config.js";
+
 const router = express.Router();
-router.post(
-  "/add-recipe",
-  authentication,
-  isAdmin,
-  upload.array("images", 8),
-  wrapAsync(addRecipe)
-);
+router.post("/add-recipe", authentication, isAdmin, wrapAsync(addRecipe));
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
 router.delete(
   "/delete-recipe",

@@ -1,53 +1,50 @@
 import cloudinary from "cloudinary";
-import multer from "multer";
-import { expressError } from "../utils/expressError.js";
+import streamifier from "streamifier";
+import { expressError } from "../utils/expressError.js"; // Assuming you have this error handler
+
 // Cloudinary configuration
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-// Multer storage configuration
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(
-        new expressError(
-          400,
-          "Unsupported file type. Only JPG, PNG, and WEBP are allowed."
-        )
-      );
-    }
-  },
-});
 
-// Image upload utility
-const imageUploadUtil = async (files) => {
+// Image upload utility for a single file
+const imageUploadUtil = async (file) => {
   try {
-    if (files.length > 8) {
-      throw new expressError(400, "You can only upload a maximum of 8 images.");
+    if (!file) {
+      throw new expressError(400, "No file provided for upload.");
     }
-    const uploadPromises = files.map((file) =>
-      cloudinary.v2.uploader.upload_stream(
-        { resource_type: "auto" },
-        file.buffer
-      )
-    );
-    const results = await Promise.all(uploadPromises);
-    const urls = results.map((result) => result.secure_url);
-    return urls;
+
+    console.log("file received for upload:", file);
+
+    // Convert the file buffer into a readable stream
+    const stream = streamifier.createReadStream(file.buffer);
+
+    // Upload the stream to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.v2.uploader
+        .upload_stream(
+          { resource_type: "auto", folder: "recipe_images" }, // Organize images in a specific folder
+          (error, result) => {
+            if (error) {
+              reject(
+                new Error(
+                  `Failed to upload ${file.originalname}: ${error.message}`
+                )
+              );
+            } else {
+              resolve(result.secure_url);
+            }
+          }
+        )
+        .end(stream);
+    });
+
+    return result; // Return the uploaded image URL
   } catch (error) {
-    throw new expressError(
-      400,
-      `Unable to upload image. Error: ${error.message}`
-    );
+    throw new expressError(400, `Image upload failed: ${error.message}`);
   }
 };
 
-export { upload, imageUploadUtil };
+export { imageUploadUtil };

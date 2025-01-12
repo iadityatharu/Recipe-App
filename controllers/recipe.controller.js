@@ -10,40 +10,53 @@ import {
 import { imageUploadUtil } from "../config/cloudinary.config.js";
 export const addRecipe = async (req, res) => {
   const { title, description, price, ingredients, process, images } = req.body;
+  const uploadedFile = req.file;
+  if (!title || !description || !price) {
+    return res
+      .status(400)
+      .json({ message: "Title, description, and price are required." });
+  }
   let imageUrls = [];
-  // Handle uploaded image files
-  const uploadedImages = req.files;
-  if (uploadedImages && uploadedImages.length > 0) {
-    // Upload images to Cloudinary and get their URLs
-    const uploadedImageUrls = await imageUploadUtil(uploadedImages);
-    imageUrls = [...uploadedImageUrls];
+  if (uploadedFile) {
+    try {
+      const uploadedImageUrl = await imageUploadUtil(uploadedFile);
+      imageUrls.push(uploadedImageUrl);
+    } catch (error) {
+      console.error("[addRecipe] Error uploading image:", error.message);
+      return res
+        .status(400)
+        .json({ message: `Image upload failed: ${error.message}` });
+    }
   }
-  // Handle image URLs provided in the JSON body
-  if (images && Array.isArray(images) && images.length > 0) {
-    imageUrls = [...imageUrls, ...images];
+
+  if (images) {
+    const providedImageUrls = Array.isArray(images) ? images : [images];
+    imageUrls = [...imageUrls, ...providedImageUrls];
   }
-  // Default image if no images are provided
-  if (imageUrls.length === 0) {
-    imageUrls = [
-      "https://www.gettyimages.com/detail/photo/men-eating-vegan-creamy-roasted-pumpkin-soup-royalty-free-image/1197494143",
-    ];
-  }
-  console.log(imageUrls);
+
+  const parsedIngredients = ingredients
+    ? Array.isArray(ingredients)
+      ? ingredients
+      : JSON.parse(ingredients)
+    : [];
+  const parsedProcess = process
+    ? Array.isArray(process)
+      ? process
+      : JSON.parse(process)
+    : [];
   const validRecipe = {
     title,
     description,
     price,
-    ingredients,
-    process,
+    ingredients: parsedIngredients,
+    process: parsedProcess,
     images: imageUrls,
   };
-
   const response = await addRecipeService(validRecipe);
   return res
     .status(200)
     .json({ message: "Recipe added successfully", data: response });
 };
-
 export const updateRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await updateRecipeService(recipeid, req.body);
