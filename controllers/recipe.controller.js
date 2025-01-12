@@ -10,11 +10,9 @@ import {
 import { expressError } from "../utils/expressError.js";
 export const addRecipe = async (req, res) => {
   const { title, description, price, ingredients, process } = req.body;
-  // Ensure required fields are provided
   if (!title || !description || !price) {
     throw new expressError(400, "Title, description, and price are required");
   }
-  // Use the uploaded image URL from the middleware
   const imageUrl = req.imageUrl;
   // Parse ingredients and process if provided as strings
   const parsedIngredients = Array.isArray(ingredients)
