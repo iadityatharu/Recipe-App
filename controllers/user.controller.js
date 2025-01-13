@@ -38,12 +38,14 @@ export const signin = async (req, res) => {
   }
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "Strict",
     expires: accessExpiry,
   });
   res.cookie("refreshToken", response.newRefreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "Strict",
     expires: refreshExpiry,
   });
   return res.status(200).json({ status: 200, message: "Signin successful" });
