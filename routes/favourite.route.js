@@ -9,13 +9,13 @@ import {
 const router = express.Router();
 // add recipe to favourite
 router.put(
-  "/add-recipe-to-favourite",
+  "/add-recipe-to-favourite/:id",
   authentication,
   wrapAsync(addRecipeToFavourite)
 );
 // remove recipe from favourite
 router.put(
-  "/remove-recipe-from-favourite",
+  "/remove-recipe-from-favourite/:id",
   authentication,
   wrapAsync(removeRecipeFromFavourite)
 );

@@ -24,7 +24,7 @@ router.delete(
   uploadImageHandler,
   wrapAsync(deleteRecipe)
 );
-router.get("/get-all-recipe", wrapAsync(getAllRecipe));
+router.get("/get-all-recipe", authentication, wrapAsync(getAllRecipe));
 router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
 router.get(

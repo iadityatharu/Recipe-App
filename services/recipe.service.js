@@ -30,7 +30,7 @@ export const deleteRecipe = async (recipeId) => {
 };
 export const getAllRecipe = async () => {
   const recipes = await Recipe.find()
-    .select("images title price")
+    .select("_id images title price")
     .sort({ createdAt: -1 });
   return recipes;
 };
@@ -42,7 +42,7 @@ export const search = async (title, price) => {
 };
 export const getRecentRecipe = async () => {
   const recipes = await Recipe.find()
-    .select("images title price")
+    .select("_id images title price")
     .sort({ createdAt: -1 })
     .limit(4);
   return recipes;
