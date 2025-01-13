@@ -14,7 +14,7 @@ export const placeOrder = async (req, res) => {
   }
   const response = await placeOrderService(userId, recipeId, paymentMethodId);
   return res.status(200).json({
-    status: true,
+    status: 200,
     message: response.message,
     orderId: response.orderId,
   });
@@ -25,7 +25,7 @@ export const orderHistory = async (req, res) => {
   if (!ordersData) {
     throw new expressError(404, "No order history found for the user");
   }
-  return res.status(200).json({ status: true, data: ordersData });
+  return res.status(200).json({ status: 200, data: ordersData });
 };
 // Controller to get all orders (admin)
 export const getAllOrder = async (req, res) => {
@@ -33,7 +33,7 @@ export const getAllOrder = async (req, res) => {
   if (!orders || orders.length === 0) {
     throw new expressError(404, "No orders found");
   }
-  return res.status(200).json({ status: true, orders });
+  return res.status(200).json({ status: 200, data: orders });
 };
 // Controller to update order status (admin)
 export const updateOrderAdmin = async (req, res) => {
@@ -43,7 +43,7 @@ export const updateOrderAdmin = async (req, res) => {
     throw new expressError(400, "Order ID and status are required");
   }
   const response = await updateOrderService(id, status);
-  return res.status(200).json({ message: response.message });
+  return res.status(200).json({ status: 200, message: response.message });
 };
 export const search = async (req, res) => {
   const { username, recipe, phone, address, status } = req.body;
@@ -60,5 +60,5 @@ export const search = async (req, res) => {
   if (!response || response.length === 0) {
     throw new expressError(404, "No matching orders found");
   }
-  res.status(200).json({ response });
+  res.status(200).json({ status: 200, data: response });
 };

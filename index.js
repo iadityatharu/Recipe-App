@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
-import limitter from "express-rate-limit";
 import cookieParser from "cookie-parser";
+import limitter from "express-rate-limit";
 import { connection } from "./config/connection.config.js";
 import { expressError } from "./utils/expressError.js";
 import { missingVar } from "./function/checkEnv.js";
@@ -14,13 +14,18 @@ const app = express();
 missingVar();
 //middlewar
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const rateLimit = limitter({
   windowMs: 1 * 60 * 1000, // 1 minutes
-  max: 40, // Limit 40 requests per IP
+  max: 8, // Limit 40 requests per IP
   handler: (req, res) => {
     res.status(429).json({
       message: `Too many requests from IP: ${req.ip}`,

@@ -16,7 +16,9 @@ export const signup = async (req, res) => {
   const validUser = req.validUser;
   const response = await signupService(validUser);
   if (response.status === 201) {
-    return res.status(201).json({ message: "New user created successfully" });
+    return res
+      .status(201)
+      .json({ status: 201, message: "New user created successfully" });
   } else if (response.status == 409) {
     throw new expressError(409, "User already exists");
   } else {
@@ -36,13 +38,15 @@ export const signin = async (req, res) => {
   }
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,
+    secure: true,
     expires: accessExpiry,
   });
   res.cookie("refreshToken", response.newRefreshToken, {
     httpOnly: true,
+    secure: true,
     expires: refreshExpiry,
   });
-  return res.status(200).json({ message: "Signin successful" });
+  return res.status(200).json({ status: 200, message: "Signin successful" });
 };
 
 export const getUserInfo = async (req, res) => {
@@ -51,7 +55,7 @@ export const getUserInfo = async (req, res) => {
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   }
-  return res.status(200).json(response);
+  return res.status(200).json({ status: 200, data: response });
 };
 export const updateAddress = async (req, res) => {
   const userId = req.user.authClaims.id;
@@ -60,7 +64,9 @@ export const updateAddress = async (req, res) => {
   if (response.status !== 201) {
     throw new expressError(400, "Failed to update address");
   }
-  return res.status(201).json({ message: "Update address successfully" });
+  return res
+    .status(201)
+    .json({ status: 201, message: "Update address successfully" });
 };
 export const generateToken = async (req, res) => {
   const incomingRefreshToken = req.cookies.refreshToken;
@@ -74,9 +80,12 @@ export const generateToken = async (req, res) => {
   }
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,
+    secure: true,
     expires: accessExpiry,
   });
-  res.status(201).json({ message: "New access token is generated" });
+  res
+    .status(201)
+    .json({ status: 201, message: "New access token is generated" });
 };
 export const logout = async (req, res) => {
   const incomingRefreshToken = req.cookies.refreshToken;
@@ -86,7 +95,7 @@ export const logout = async (req, res) => {
   }
   res.clearCookie("accessToken", incomingRefreshToken);
   res.clearCookie("refreshToken", incomingAccessToken);
-  res.status(200).json({ message: "logout successfull" });
+  res.status(200).json({ status: 200, message: "logout successfull" });
 };
 export const sendOtp = async (req, res) => {
   const { email } = req.body;
@@ -96,7 +105,9 @@ export const sendOtp = async (req, res) => {
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   } else if (response.status === 201) {
-    return res.status(201).json({ message: "Otp sent successfully" });
+    return res
+      .status(201)
+      .json({ status: 201, message: "Otp sent successfully" });
   } else {
     throw new expressError(400, "something went wrong");
   }
@@ -109,7 +120,9 @@ export const forgotPassword = async (req, res) => {
   } else if (response.status === 403) {
     throw new expressError(403, "Invalid OTP");
   } else {
-    return res.status(201).json({ message: "Password reset successfully" });
+    return res
+      .status(201)
+      .json({ status: 201, message: "Password reset successfully" });
   }
 };
 export const changePassword = async (req, res) => {
@@ -127,7 +140,9 @@ export const changePassword = async (req, res) => {
     throw new expressError(401, "Invalid credentials");
   } else {
     res.clearCookie("refreshToken");
-    res.status(201).json({ message: "password change successfully" });
+    res
+      .status(201)
+      .json({ status: 201, message: "password change successfully" });
   }
 };
 export const search = async (req, res) => {
@@ -136,5 +151,5 @@ export const search = async (req, res) => {
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   }
-  return res.status(200).json({ users: response.users });
+  return res.status(200).json({ status: 200, users: response.users });
 };

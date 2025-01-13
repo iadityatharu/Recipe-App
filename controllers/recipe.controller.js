@@ -31,17 +31,17 @@ export const addRecipe = async (req, res) => {
   };
   // Save the recipe using the service
   const response = await addRecipeService(recipeData);
-  return res.status(201).json({ message: response });
+  return res.status(201).json({ status: 201, message: response });
 };
 export const updateRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await updateRecipeService(recipeid, req.body);
-  return res.status(200).json({ message: response });
+  return res.status(200).json({ status: 200, message: response });
 };
 export const deleteRecipe = async (req, res) => {
   const { recipeid } = req.headers;
   const response = await deleteRecipeService(recipeid);
-  return res.status(200).json({ message: response });
+  return res.status(200).json({ status: 200, message: response });
 };
 export const getAllRecipe = async (req, res) => {
   const recipes = await getAllRecipeService();
@@ -50,14 +50,14 @@ export const getAllRecipe = async (req, res) => {
 export const search = async (req, res) => {
   const { title, price } = req.body;
   const response = await searchService(title, price);
-  res.status(200).json({ response });
+  res.status(200).json({ status: 200, data: response });
 };
 export const getRecentRecipe = async (req, res) => {
   const recipes = await getRecentRecipeService();
-  return res.status(200).json({ status: "success", data: recipes });
+  return res.status(200).json({ status: 200, data: recipes });
 };
 export const getSpecificRecipe = async (req, res) => {
   const { id } = req.params;
   const recipe = await getSpecificRecipeService(id);
-  return res.status(200).json({ status: "success", data: recipe });
+  return res.status(200).json({ status: 200, data: recipe });
 };
