@@ -50,7 +50,6 @@ export const signin = async (req, res) => {
   });
   return res.status(200).json({ status: 200, message: "Signin successful" });
 };
-
 export const getUserInfo = async (req, res) => {
   const userId = req.user.authClaims.id;
   const response = await getUserInfoService(userId);
