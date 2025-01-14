@@ -48,7 +48,11 @@ export const signin = async (req, res) => {
     sameSite: "Strict",
     expires: refreshExpiry,
   });
-  return res.status(200).json({ status: 200, message: "Signin successful" });
+  return res.status(200).json({
+    status: 200,
+    message: "Signin successful",
+    data: req.user.authClaims.role,
+  });
 };
 export const getUserInfo = async (req, res) => {
   const userId = req.user.authClaims.id;
