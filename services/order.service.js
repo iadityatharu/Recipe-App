@@ -16,7 +16,11 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
   });
   const newOrder = new Order({
     user: userId,
+    title: title,
     recipe: recipeId,
+    username: username,
+    address: address,
+    phone: phone,
     payment: {
       paymentId: paymentIntent.id,
       amount: price,
