@@ -38,7 +38,7 @@ export const signin = async ({ email, password }) => {
   const newRefreshToken = await refreshToken(authClaims.id);
   existingUser.refreshToken = newRefreshToken;
   await existingUser.save();
-  return { newAccessToken, newRefreshToken };
+  return { newAccessToken, newRefreshToken, role: existingUser.role };
 };
 export const getUserInfo = async (userId) => {
   const data = await User.findById(userId).select(
