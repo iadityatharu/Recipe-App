@@ -51,7 +51,6 @@ export const signin = async (req, res) => {
   return res.status(200).json({
     status: 200,
     message: "Signin successful",
-    data: req.user.authClaims.role,
   });
 };
 export const getUserInfo = async (req, res) => {

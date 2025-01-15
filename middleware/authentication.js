@@ -7,7 +7,6 @@ export const authentication = (req, res, next) => {
   }
   jwt.verify(token, process.env.ACCESSTOKEN, (err, user) => {
     if (err) {
-      console.log(err);
       throw new expressError(403, "Token is expired, Please sign in again");
     }
     req.user = user;
