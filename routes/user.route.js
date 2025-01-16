@@ -14,7 +14,6 @@ import {
   changePassword,
   sendOtp,
 } from "../controllers/user.controller.js";
-import { checkRefreshToken } from "../middleware/checkRefreshToken.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
 router.post("/signup", validUser, wrapAsync(signup));
