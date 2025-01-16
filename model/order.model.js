@@ -5,23 +5,23 @@ const orderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
-      required: true, 
+      required: true,
     },
     recipe: {
       type: mongoose.Types.ObjectId,
       ref: "recipe",
-      required: true, 
+      required: true,
     },
     payment: {
-      paymentId: { type: String, required: true }, 
-      amount: { type: Number, required: true }, 
-      currency: { type: String, default: "usd" }, 
-      status: { type: String, default: "pending" }, 
+      paymentId: { type: String, required: true },
+      amount: { type: Number, required: true },
+      currency: { type: String, default: "usd" },
+      status: { type: String, default: "pending" },
     },
     status: {
       type: String,
-      default: "pending",
-      enum: ["pending", "processing", "delivered", "cancelled"], 
+      default: "notPurchased",
+      enum: ["notPurchased", "purchased", "cancelled"],
     },
   },
   { timestamps: true }
