@@ -2,8 +2,6 @@ const requiredEnvVar = [
   "PORT",
   "ACCESSTOKEN",
   "ACCESSEXPIRE",
-  "REFRESHTOKEN",
-  "REFRESHEXPIRE",
   "MONGO_URL",
   "NODEMAILER_PASS",
   "NODEMAILER_USER",
