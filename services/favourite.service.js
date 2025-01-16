@@ -26,6 +26,5 @@ export const displayAllFavourite = async (userId) => {
     path: "favourites",
     select: "title price images",
   });
-
   return userData.favourites;
 };
