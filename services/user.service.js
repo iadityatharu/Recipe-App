@@ -1,6 +1,6 @@
 import User from "../model/user.model.js";
 import bcrypt from "bcrypt";
-import { accessToken, refreshToken } from "../function/token.js";
+import { accessToken } from "../function/token.js";
 export const signup = async (validUser) => {
   const { firstname, middlename, lastname, password, email, phone, address } =
     validUser;
