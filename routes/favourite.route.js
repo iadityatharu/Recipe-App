@@ -21,7 +21,7 @@ router.put(
 );
 // display all favourite recipes
 router.get(
-  "/get-favourite-recipes",
+  "/get-favourite-recipe",
   authentication,
   wrapAsync(displayAllFavouriteRecipe)
 );
