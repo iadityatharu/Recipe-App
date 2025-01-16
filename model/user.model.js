@@ -42,13 +42,13 @@ const userSchema = new mongoose.Schema(
     favourites: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "recipes",
+        ref: "Recipe",
       },
     ],
     orders: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "recipes",
+        ref: "Recipe",
       },
     ],
     otp: {
