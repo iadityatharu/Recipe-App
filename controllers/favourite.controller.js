@@ -5,7 +5,7 @@ import {
 } from "../services/favourite.service.js";
 export const addRecipeToFavourite = async (req, res) => {
   const userId = req.user.authClaims.id;
-  const { recipeid } = req.headers;
+  const { recipeid } = req.params;
   const response = await addFavouriteService(recipeid, userId);
   return res.status(200).json({ status: 200, message: response });
 };
