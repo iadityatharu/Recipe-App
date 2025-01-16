@@ -2,7 +2,6 @@ import { signup as signupService } from "../services/user.service.js";
 import { signin as signinService } from "../services/user.service.js";
 import { getUserInfo as getUserInfoService } from "../services/user.service.js";
 import { updateAddres as updateAddresService } from "../services/user.service.js";
-import { generateToken as generateTokenService } from "../services/user.service.js";
 import { sendOtp as sendOtpService } from "../services/user.service.js";
 import { forgotPassword as forgotPasswordService } from "../services/user.service.js";
 import { changePassword as changePasswordService } from "../services/user.service.js";
