@@ -34,19 +34,13 @@ export const signin = async (req, res) => {
   if (response.status === 404) {
     throw new expressError(404, "User not found");
   } else if (response.status === 403) {
-    throw new expressError(403, "Unauthorized");
+    throw new expressError(403, "Invalid Credentials");
   }
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,
     secure: false,
     sameSite: "Strict",
     expires: accessExpiry,
-  });
-  res.cookie("refreshToken", response.newRefreshToken, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "Strict",
-    expires: refreshExpiry,
   });
   return res.status(200).json({
     status: 200,
