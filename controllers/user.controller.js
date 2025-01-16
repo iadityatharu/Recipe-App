@@ -9,7 +9,7 @@ import { changePassword as changePasswordService } from "../services/user.servic
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
 import jwt from "jsonwebtoken";
-import { accessExpiry, refreshExpiry } from "../constant.js";
+import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
 export const signup = async (req, res) => {
