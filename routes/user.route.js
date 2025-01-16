@@ -9,7 +9,6 @@ import {
   getUserInfo,
   updateAddress,
   search,
-  generateToken,
   logout,
   forgotPassword,
   changePassword,
@@ -22,7 +21,6 @@ router.post("/signup", validUser, wrapAsync(signup));
 router.post("/signin", wrapAsync(signin));
 router.get("/get-user-information", authentication, wrapAsync(getUserInfo));
 router.patch("/update-address", authentication, wrapAsync(updateAddress));
-router.post("/refresh-token", checkRefreshToken, wrapAsync(generateToken));
 router.delete("/logout", authentication, wrapAsync(logout));
 router.patch(
   "/change-password",
