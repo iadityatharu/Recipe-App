@@ -16,7 +16,16 @@ export const removeFavourite = async (recipeid, userId) => {
     return "Recipe removed from favourites";
   }
 };
+// export const displayAllFavourite = async (userId) => {
+//   const userData = await User.findById(userId).populate("favourites");
+//   return userData.favourites;
+// };
+
 export const displayAllFavourite = async (userId) => {
-  const userData = await User.findById(userId).populate("favourites");
+  const userData = await User.findById(userId).populate({
+    path: "favourites",
+    select: "title price images",
+  });
+
   return userData.favourites;
 };
