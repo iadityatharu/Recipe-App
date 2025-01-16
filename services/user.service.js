@@ -35,7 +35,6 @@ export const signin = async ({ email, password }) => {
     role: existingUser.role,
   };
   const newAccessToken = await accessToken(authClaims);
-  existingUser.refreshToken = newRefreshToken;
   await existingUser.save();
   return { newAccessToken, role: existingUser.role };
 };
