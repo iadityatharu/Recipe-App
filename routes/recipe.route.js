@@ -17,9 +17,9 @@ const router = express.Router();
 router.post(
   "/add-recipe",
   authentication,
-  upload,
-  uploadImageHandler,
   isAdmin,
+  uploadImageHandler,
+  upload,
   wrapAsync(addRecipe)
 );
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));
