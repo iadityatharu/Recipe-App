@@ -15,6 +15,7 @@ export const removeFavourite = async (recipeid, userId) => {
     await User.findByIdAndUpdate(userId, { $pull: { favourites: recipeid } });
     return "Recipe removed from favourites";
   }
+  return "Recipe is not in favourite list";
 };
 // export const displayAllFavourite = async (userId) => {
 //   const userData = await User.findById(userId).populate("favourites");
