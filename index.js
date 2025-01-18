@@ -22,7 +22,6 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 const rateLimit = limitter({
   windowMs: 1 * 60 * 1000, // 1 minutes
   max: 200, // Limit 40 requests per IP

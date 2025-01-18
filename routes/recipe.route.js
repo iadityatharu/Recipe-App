@@ -18,8 +18,8 @@ router.post(
   "/add-recipe",
   authentication,
   isAdmin,
+  upload.single("images"),
   uploadImageHandler,
-  upload,
   wrapAsync(addRecipe)
 );
 router.put("/update-recipe", authentication, isAdmin, wrapAsync(updateRecipe));

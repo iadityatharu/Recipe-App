@@ -1,31 +1,45 @@
 import multer from "multer";
 import { expressError } from "../utils/expressError.js";
 import { imageUploadUtil } from "../config/cloudinary.config.js";
-const storage = multer.memoryStorage();
+
+import path from "path"; // Add this line to import the path module
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Set the upload directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Generate a unique filename
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const fileTypes = /jpeg|jpg|png|gif|webp/; // Allowed file types
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = fileTypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed (jpeg, jpg, png, gif, webp)."));
+  }
+};
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5 MB
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(file.mimetype)) {
-      return cb(
-        new expressError(
-          400,
-          "Invalid file type. Only JPEG, PNG, and GIF are allowed."
-        )
-      );
-    }
-    cb(null, true);
-  },
-}).single("image");
+  fileFilter,
+});
+
 const uploadImageHandler = async (req, res, next) => {
   try {
-    const uploadedFile = req.file;
-    if (!uploadedFile) {
-      throw new expressError(400, "No image file provided for upload.");
+    if (!req.file) {
+      throw new expressError(404, "No image file provided for upload.");
     }
-    const imageUrl = await imageUploadUtil(uploadedFile);
-    req.imageUrl = imageUrl;
+
+    // Pass the complete `req.file` object to `imageUploadUtil`
+    const imageUrl = await imageUploadUtil(req.file);
+    req.imageUrl = imageUrl; // Attach the uploaded image URL to the request object
     next();
   } catch (error) {
     next(error);
