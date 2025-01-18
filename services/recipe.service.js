@@ -34,12 +34,23 @@ export const getAllRecipe = async () => {
     .sort({ createdAt: -1 });
   return recipes;
 };
+// export const search = async (title, price) => {
+//   const response = await Recipe.find({
+//     $or: [{ title: title }, { price: price }],
+//   }).select("-createdAt -updatedAt");
+//   return response;
+// };
 export const search = async (title, price) => {
-  const response = await Recipe.find({
-    $or: [{ title: title }, { price: price }],
-  }).select("-createdAt -updatedAt");
+  const query = {};
+
+  // Dynamically build the query
+  if (title) query.title = { $regex: title, $options: "i" }; // Case-insensitive search
+  if (price) query.price = price; // Exact match for price
+
+  const response = await Recipe.find(query).select("-createdAt -updatedAt");
   return response;
 };
+
 export const getRecentRecipe = async () => {
   const recipes = await Recipe.find()
     .select("_id images title price")

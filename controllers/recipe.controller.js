@@ -39,7 +39,7 @@ export const updateRecipe = async (req, res) => {
   return res.status(200).json({ status: 200, message: response });
 };
 export const deleteRecipe = async (req, res) => {
-  const { recipeid } = req.headers;
+  const { recipeid } = req.body;
   const response = await deleteRecipeService(recipeid);
   return res.status(200).json({ status: 200, message: response });
 };
@@ -48,10 +48,16 @@ export const getAllRecipe = async (req, res) => {
   return res.status(200).json({ status: true, data: recipes });
 };
 export const search = async (req, res) => {
-  const { title, price } = req.body;
-  const response = await searchService(title, price);
-  res.status(200).json({ status: 200, data: response });
+  const { title, price } = req.query;
+  try {
+    const response = await searchService(title, price);
+    res.status(200).json({ status: true, data: response });
+  } catch (error) {
+    console.error("Error in search controller:", error);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
 };
+
 export const getRecentRecipe = async (req, res) => {
   const recipes = await getRecentRecipeService();
   return res.status(200).json({ status: 200, data: recipes });
