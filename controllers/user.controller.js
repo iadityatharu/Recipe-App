@@ -90,8 +90,8 @@ export const sendOtp = async (req, res) => {
   }
 };
 export const forgotPassword = async (req, res) => {
-  const { email, otp, password } = req.body;
-  const response = await forgotPasswordService(email, otp, password);
+  const { email, otp, newPassword } = req.body;
+  const response = await forgotPasswordService(email, otp, newPassword);
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   } else if (response.status === 403) {
@@ -102,6 +102,7 @@ export const forgotPassword = async (req, res) => {
       .json({ status: 201, message: "Password reset successfully" });
   }
 };
+
 export const changePassword = async (req, res) => {
   const token = req.cookies.refreshToken;
   const { userId } = jwt.verify(token, process.env.REFRESHTOKEN);

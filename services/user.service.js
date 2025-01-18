@@ -70,6 +70,7 @@ export const forgotPassword = async (email, otp, password) => {
   if (!isOtpValid) {
     return { status: 403 };
   }
+
   const hashPassword = await bcrypt.hash(password, 10);
   user.password = hashPassword;
   user.otp = null;
