@@ -2,20 +2,13 @@ import multer from "multer";
 import { expressError } from "../utils/expressError.js";
 import { imageUploadUtil } from "../config/cloudinary.config.js";
 
-import path from "path"; // Add this line to import the path module
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Set the upload directory
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Generate a unique filename
-  },
-});
-
+// Multer configuration (no local storage)
+const storage = multer.memoryStorage(); // Store files in memory temporarily
 const fileFilter = (req, file, cb) => {
   const fileTypes = /jpeg|jpg|png|gif|webp/; // Allowed file types
-  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const extname = fileTypes.test(
+    file.originalname.split(".").pop().toLowerCase()
+  );
   const mimetype = fileTypes.test(file.mimetype);
 
   if (extname && mimetype) {
@@ -37,8 +30,8 @@ const uploadImageHandler = async (req, res, next) => {
       throw new expressError(404, "No image file provided for upload.");
     }
 
-    // Pass the complete `req.file` object to `imageUploadUtil`
-    const imageUrl = await imageUploadUtil(req.file);
+    // Use the buffer directly to upload to Cloudinary
+    const imageUrl = await imageUploadUtil(req.file.buffer); // Update `imageUploadUtil` to handle file buffers
     req.imageUrl = imageUrl; // Attach the uploaded image URL to the request object
     next();
   } catch (error) {
