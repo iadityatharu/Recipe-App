@@ -19,5 +19,6 @@ export const removeRecipeFromFavourite = async (req, res) => {
 export const displayAllFavouriteRecipe = async (req, res) => {
   const userId = req.user.authClaims.id;
   const favouriteRecipes = await displayAllFavouriteService(userId);
+  console.log(favouriteRecipes);
   return res.status(200).json({ status: 200, data: favouriteRecipes });
 };

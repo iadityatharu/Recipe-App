@@ -35,7 +35,7 @@ router.get("/search", authentication, wrapAsync(search));
 router.get(
   "/get-recipe-by-id/:id",
   authentication,
-  isPurchased,
+  // isPurchased,
   wrapAsync(getSpecificRecipe)
 );
 export default router;
