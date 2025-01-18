@@ -8,66 +8,44 @@ import {
   getSpecificRecipe as getSpecificRecipeService,
 } from "../services/recipe.service.js";
 import { expressError } from "../utils/expressError.js";
-export const addRecipe = async (req, res, next) => {
-  try {
-    const { title, description, price, ingredients, process } = req.body;
-
-    // Validate required fields
-    if (!title || !description || !price) {
-      throw new expressError(
-        400,
-        "Title, description, and price are required."
-      );
-    }
-
-    // Retrieve the image URL from the middleware
-    const imageUrl = req.imageUrl;
-    if (!imageUrl) {
-      throw new expressError(
-        400,
-        "Image upload failed. Please provide an image."
-      );
-    }
-
-    // Parse ingredients and process if provided as strings
-    const parsedIngredients = Array.isArray(ingredients)
-      ? ingredients
-      : JSON.parse(ingredients || "[]");
-    const parsedProcess = Array.isArray(process)
-      ? process
-      : JSON.parse(process || "[]");
-
-    // Validate ingredients and process arrays
-    if (!parsedIngredients.length) {
-      throw new expressError(400, "Ingredients list cannot be empty.");
-    }
-    if (!parsedProcess.length) {
-      throw new expressError(400, "Process steps cannot be empty.");
-    }
-
-    // Prepare recipe data
-    const recipeData = {
-      title,
-      description,
-      price,
-      ingredients: parsedIngredients,
-      process: parsedProcess,
-      images: imageUrl, // Attach the uploaded image URL to the "images" field
-    };
-
-    // Save the recipe using the service
-    const response = await addRecipeService(recipeData);
-
-    // Return success response
-    return res.status(201).json({
-      status: 201,
-      message: "Recipe added successfully!",
-      data: response,
-    });
-  } catch (error) {
-    // Pass any errors to the error handler
-    next(error);
+export const addRecipe = async (req, res) => {
+  const { title, description, price, ingredients, process } = req.body;
+  if (!title || !description || !price) {
+    throw new expressError(400, "Title, description, and price are required.");
   }
+  const imageUrl = req.imageUrl;
+  if (!imageUrl) {
+    throw new expressError(
+      400,
+      "Image upload failed. Please provide an image."
+    );
+  }
+  const parsedIngredients = Array.isArray(ingredients)
+    ? ingredients
+    : JSON.parse(ingredients || "[]");
+  const parsedProcess = Array.isArray(process)
+    ? process
+    : JSON.parse(process || "[]");
+  if (!parsedIngredients.length) {
+    throw new expressError(400, "Ingredients list cannot be empty.");
+  }
+  if (!parsedProcess.length) {
+    throw new expressError(400, "Process steps cannot be empty.");
+  }
+  const recipeData = {
+    title,
+    description,
+    price,
+    ingredients: parsedIngredients,
+    process: parsedProcess,
+    images: imageUrl,
+  };
+  const response = await addRecipeService(recipeData);
+  return res.status(201).json({
+    status: 201,
+    message: "Recipe added successfully!",
+    data: response,
+  });
 };
 
 export const updateRecipe = async (req, res) => {
