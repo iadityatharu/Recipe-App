@@ -67,13 +67,11 @@ export const updateAddress = async (req, res) => {
     .json({ status: 201, message: "Update address successfully" });
 };
 export const logout = async (req, res) => {
-  const incomingRefreshToken = req.cookies.refreshToken;
   const incomingAccessToken = req.cookies.accessToken;
-  if (!incomingRefreshToken && !incomingAccessToken) {
+  if (!incomingAccessToken) {
     throw new expressError(401, "Invalid Tokens");
   }
   res.clearCookie("accessToken", incomingRefreshToken);
-  res.clearCookie("refreshToken", incomingAccessToken);
   res.status(200).json({ status: 200, message: "logout successfull" });
 };
 export const sendOtp = async (req, res) => {
