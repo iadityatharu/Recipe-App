@@ -68,7 +68,6 @@ export const search = async (req, res) => {
     const response = await searchService(title, price);
     res.status(200).json({ status: true, data: response });
   } catch (error) {
-    console.error("Error in search controller:", error);
     res.status(500).json({ status: false, message: "Server error" });
   }
 };
