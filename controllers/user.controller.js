@@ -71,7 +71,7 @@ export const logout = async (req, res) => {
   if (!incomingAccessToken) {
     throw new expressError(401, "Invalid Tokens");
   }
-  res.clearCookie("accessToken", incomingRefreshToken);
+  res.clearCookie("accessToken", incomingAccessToken);
   res.status(200).json({ status: 200, message: "logout successfull" });
 };
 export const sendOtp = async (req, res) => {
