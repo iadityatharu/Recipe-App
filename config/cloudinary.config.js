@@ -1,5 +1,4 @@
 import cloudinary from "cloudinary";
-import streamifier from "streamifier";
 import { expressError } from "../utils/expressError.js";
 
 // Configure Cloudinary
@@ -9,22 +8,23 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const imageUploadUtil = async (buffer) => {
-  try {
-    const result = await cloudinary.uploader.upload_stream({
-      resource_type: "image",
-    });
-
-    // Use a stream to upload the buffer
-    const stream = cloudinary.uploader.upload_stream((error, result) => {
-      if (error) {
-        throw new Error(error.message);
+const imageUploadUtil = (imageBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.v2.uploader.upload_stream(
+      { folder: "recipes" },
+      (error, result) => {
+        if (error) {
+          reject(
+            new expressError(400, "Failed to upload image to Cloudinary.")
+          );
+        } else {
+          resolve(result.secure_url);
+        }
       }
-      return result.secure_url; // Return the secure URL of the uploaded image
-    });
-    stream.end(buffer); // Send the buffer data to the stream
-  } catch (error) {
-    throw new Error("Image upload to Cloudinary failed.");
-  }
+    );
+
+    stream.end(imageBuffer); 
+  });
 };
+
 export { imageUploadUtil };
