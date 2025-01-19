@@ -86,7 +86,7 @@ export const forgotPassword = async (email, otp, password) => {
 };
 export const deleteUser = async (userId) => {
   await User.findByIdAndDelete(userId);
-  return { status: 200 };
+  return "User deleted successfully";
 };
 
 export const changePassword = async (userId, oldPassword, newPassword) => {

@@ -112,13 +112,10 @@ export const forgotPassword = async (req, res) => {
       .json({ status: 201, message: "Password reset successfully" });
   }
 };
-export const deleteUser = (req, res) => {
-  const { id } = req.user.authClaims.id;
-  const response = deleteUserService(id);
-  if (response.status === 404) {
-    throw new expressError(404, "user not found");
-  }
-  return res.status(200).json({ status: 200, message: "user deleted" });
+export const deleteUser = async (req, res) => {
+  const { userid } = req.body;
+  const response = await deleteUserService(userid);
+  return res.status(200).json({ status: 200, message: response });
 };
 export const changePassword = async (req, res) => {
   const token = req.cookies.refreshToken;
