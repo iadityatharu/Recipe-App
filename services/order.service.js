@@ -6,7 +6,7 @@ const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 export const placeOrder = async (userId, recipeId, paymentMethodId) => {
   const [user, recipe] = await Promise.all([
-    User.findById(userId).select("username address phone"),
+    User.findById(userId).select("firstname address phone"),
     Recipe.findById(recipeId),
   ]);
 
@@ -17,7 +17,7 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     throw { statusCode: 404, message: "Recipe not found" };
   }
 
-  const { username, address, phone } = user;
+  const { firstname, address, phone } = user;
   const { title, price } = recipe;
 
   // Create payment intent
@@ -37,7 +37,7 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
   const order = await new Order({
     user: userId,
     recipe: recipeId,
-    username,
+    username: firstname,
     address,
     phone,
     payment: {
@@ -48,6 +48,13 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     },
     status: "purchased",
   }).save();
+
+  // Push the order ID into the user's orders array
+  await User.findByIdAndUpdate(
+    userId,
+    { $push: { orders: order._id } },
+    { new: true }
+  );
 
   return {
     statusCode: 200,
