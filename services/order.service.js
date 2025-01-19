@@ -50,10 +50,6 @@ export const getAllOrder = async () => {
   const orders = await Order.find({}).sort({ createdAt: -1 });
   return orders;
 };
-export const updateOrder = async (orderId, status) => {
-  await Order.findByIdAndUpdate(orderId, { status });
-  return { message: "Status updated successfully" };
-};
 export const search = async (username, recipe, phone, address, status) => {
   const order = await Order.find({
     $or: [

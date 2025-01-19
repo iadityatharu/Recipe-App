@@ -2,7 +2,6 @@ import {
   placeOrder as placeOrderService,
   orderHistory as orderHistoryService,
   getAllOrder as getAllOrderService,
-  updateOrder as updateOrderService,
   search as searchService,
 } from "../services/order.service.js";
 import { expressError } from "../utils/expressError.js";
@@ -34,16 +33,6 @@ export const getAllOrder = async (req, res) => {
     throw new expressError(404, "No orders found");
   }
   return res.status(200).json({ status: 200, data: orders });
-};
-// Controller to update order status (admin)
-export const updateOrderAdmin = async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-  if (!id || !status) {
-    throw new expressError(400, "Order ID and status are required");
-  }
-  const response = await updateOrderService(id, status);
-  return res.status(200).json({ status: 200, message: response.message });
 };
 export const search = async (req, res) => {
   const { username, recipe, phone, address, status } = req.body;
