@@ -8,6 +8,7 @@ import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { recipeId, paymentMethodId } = req.body;
+
   if (!recipeId || !paymentMethodId) {
     throw new expressError(400, "Recipe ID and Payment Method ID are required");
   }
@@ -16,8 +17,10 @@ export const placeOrder = async (req, res) => {
     status: 200,
     message: response.message,
     orderId: response.orderId,
+    paymentStatus: response.paymentStatus,
   });
 };
+
 export const orderHistory = async (req, res) => {
   const userId = req.user.authClaims.id;
   const ordersData = await orderHistoryService(userId);
