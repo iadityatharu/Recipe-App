@@ -11,7 +11,7 @@ export const sendEmail = (otp, email) => {
   const mailOptions = {
     from: process.env.NODEMAILER_USER,
     to: email,
-    subject: "IMPORTANT! Reset Password Pustak Sansar",
+    subject: "IMPORTANT! Reset Password BHOK_LAGYO",
     text: `Your Otp is ${otp} .Please, Do not share this otp with anyone.`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
