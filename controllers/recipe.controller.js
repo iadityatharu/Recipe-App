@@ -77,7 +77,8 @@ export const getRecentRecipe = async (req, res) => {
   return res.status(200).json({ status: 200, data: recipes });
 };
 export const getSpecificRecipe = async (req, res) => {
-  const { id } = req.params;
-  const recipe = await getSpecificRecipeService(id);
+  const { recipeId } = req.body;
+  console.log(req.body);
+  const recipe = await getSpecificRecipeService(recipeId);
   return res.status(200).json({ status: 200, data: recipe });
 };

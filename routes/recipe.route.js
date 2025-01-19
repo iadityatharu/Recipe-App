@@ -11,7 +11,6 @@ import {
   updateRecipe,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
-import isPurchased from "../middleware/isPurchased.js";
 import { upload, uploadImageHandler } from "../middleware/cloudinary.js";
 const router = express.Router();
 router.post(
@@ -33,9 +32,8 @@ router.get("/get-all-recipe", authentication, wrapAsync(getAllRecipe));
 router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
 router.get(
-  "/get-recipe-by-id/:id",
+  "/get-recipe-by-id/",
   authentication,
-  isPurchased,
   wrapAsync(getSpecificRecipe)
 );
 export default router;

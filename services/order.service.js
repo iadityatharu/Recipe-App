@@ -63,14 +63,30 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
 };
 
 export const orderHistory = async (userId) => {
-  const userData = await User.findById(userId)
-    .sort({ createdAt: -1 })
-    .select("orders")
-    .populate({
-      path: "orders",
-    });
-  return userData.orders.reverse();
+  const userData = await User.findById(userId).select("orders").populate({
+    path: "orders",
+  });
+
+  const ordersWithRecipeTitles = [];
+
+  if (userData && userData.orders) {
+    for (const order of userData.orders) {
+      const recipe = await Recipe.findById(order.recipe.toString()).select(
+        "title"
+      );
+      ordersWithRecipeTitles.push({
+        orderId: order._id,
+        recipeId: order.recipe,
+        recipeTitle: recipe ? recipe.title : "Unknown Recipe",
+        price: order.payment.amount,
+        purchaseDate: order.createdAt,
+      });
+    }
+  }
+
+  return ordersWithRecipeTitles.reverse();
 };
+
 export const getAllOrder = async () => {
   const orders = await Order.find({}).sort({ createdAt: -1 });
   return orders;

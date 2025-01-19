@@ -8,7 +8,6 @@ import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { recipeId, paymentMethodId } = req.body;
-
   if (!recipeId || !paymentMethodId) {
     return res.status(400).json({
       status: 400,
