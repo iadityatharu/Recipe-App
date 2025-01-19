@@ -8,18 +8,27 @@ import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { recipeId, paymentMethodId } = req.body;
-  console.log(recipeId);
-  console.log(paymentMethodId);
+
   if (!recipeId || !paymentMethodId) {
-    throw new expressError(400, "Recipe ID and Payment Method ID are required");
+    return res.status(400).json({
+      status: 400,
+      message: "Recipe ID and Payment Method ID are required",
+    });
   }
-  const response = await placeOrderService(userId, recipeId, paymentMethodId);
-  return res.status(200).json({
-    status: 200,
-    message: response.message,
-    orderId: response.orderId,
-    paymentStatus: response.paymentStatus,
-  });
+
+  try {
+    const response = await placeOrderService(userId, recipeId, paymentMethodId);
+    return res.status(response.statusCode).json({
+      status: response.statusCode,
+      message: response.message,
+      orderId: response.orderId,
+      paymentStatus: response.paymentStatus,
+    });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    const message = error.message || "An unexpected error occurred";
+    return res.status(statusCode).json({ status: statusCode, message });
+  }
 };
 
 export const orderHistory = async (req, res) => {

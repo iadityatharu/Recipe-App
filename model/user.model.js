@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
     orders: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Recipe",
+        ref: "Order",
       },
     ],
     otp: {
