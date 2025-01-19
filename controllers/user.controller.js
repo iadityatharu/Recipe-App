@@ -8,6 +8,7 @@ import { changePassword as changePasswordService } from "../services/user.servic
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
 import jwt from "jsonwebtoken";
+import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
@@ -72,8 +73,9 @@ export const getAllUsers = async (req, res) => {
   if (response.status === 404) {
     throw new expressError(404, "user not found");
   }
-  return res.status(200).json({ status: 200, users: response.users });
+  return res.status(200).json(response);
 };
+
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;
   if (!incomingAccessToken) {
@@ -110,7 +112,14 @@ export const forgotPassword = async (req, res) => {
       .json({ status: 201, message: "Password reset successfully" });
   }
 };
-
+export const deleteUser = (req, res) => {
+  const { id } = req.user.authClaims.id;
+  const response = deleteUserService(id);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  }
+  return res.status(200).json({ status: 200, message: "user deleted" });
+};
 export const changePassword = async (req, res) => {
   const token = req.cookies.refreshToken;
   const { userId } = jwt.verify(token, process.env.REFRESHTOKEN);

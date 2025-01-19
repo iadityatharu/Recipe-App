@@ -13,6 +13,7 @@ import {
   logout,
   forgotPassword,
   changePassword,
+  deleteUser,
   sendOtp,
 } from "../controllers/user.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
@@ -29,7 +30,8 @@ router.patch(
   wrapAsync(changePassword)
 );
 router.post("/send-otp", wrapAsync(sendOtp));
-router.get("/get-all-users", authentication, isAdmin, wrapAsync(getAllUsers));
+router.get("/get-all-user", authentication, isAdmin, wrapAsync(getAllUsers));
 router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
+router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
 export default router;

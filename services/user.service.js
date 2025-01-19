@@ -84,6 +84,11 @@ export const forgotPassword = async (email, otp, password) => {
   await user.save();
   return { status: 201 };
 };
+export const deleteUser = async (userId) => {
+  await User.findByIdAndDelete(userId);
+  return { status: 200 };
+};
+
 export const changePassword = async (userId, oldPassword, newPassword) => {
   const user = await User.findById(userId);
   if (!user) {
