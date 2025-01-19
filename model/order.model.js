@@ -21,7 +21,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "notPurchased",
-      enum: ["notPurchased", "purchased", "cancelled"],
+      enum: ["notPurchased", "purchased", "cancelled", "pending"], // Add "pending" here
     },
   },
   { timestamps: true }
@@ -30,3 +30,4 @@ const orderSchema = new mongoose.Schema(
 const Order = mongoose.model("order", orderSchema);
 
 export default Order;
+

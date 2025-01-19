@@ -11,7 +11,7 @@ import {
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
 // place order
-router.post("/place-order", authentication, isPurchased, wrapAsync(placeOrder));
+router.post("/place-order", authentication, wrapAsync(placeOrder));
 // get order-history of particular user
 router.get(
   "/get-order-history",

@@ -8,7 +8,8 @@ import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
   const userId = req.user.authClaims.id;
   const { recipeId, paymentMethodId } = req.body;
-
+  console.log(recipeId);
+  console.log(paymentMethodId);
   if (!recipeId || !paymentMethodId) {
     throw new expressError(400, "Recipe ID and Payment Method ID are required");
   }
