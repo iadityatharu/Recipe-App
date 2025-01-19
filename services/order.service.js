@@ -48,8 +48,6 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     },
     status: "purchased",
   }).save();
-
-  // Push the order ID into the user's orders array
   await User.findByIdAndUpdate(
     userId,
     { $push: { orders: order._id } },
