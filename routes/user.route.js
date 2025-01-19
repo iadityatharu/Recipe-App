@@ -7,6 +7,7 @@ import {
   signup,
   signin,
   getUserInfo,
+  getAllUsers,
   updateAddress,
   search,
   logout,
@@ -28,6 +29,7 @@ router.patch(
   wrapAsync(changePassword)
 );
 router.post("/send-otp", wrapAsync(sendOtp));
+router.get("/get-all-users", authentication, isAdmin, wrapAsync(getAllUsers));
 router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 export default router;

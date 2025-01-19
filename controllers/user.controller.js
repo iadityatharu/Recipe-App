@@ -8,6 +8,7 @@ import { changePassword as changePasswordService } from "../services/user.servic
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
 import jwt from "jsonwebtoken";
+import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
@@ -65,6 +66,13 @@ export const updateAddress = async (req, res) => {
   return res
     .status(201)
     .json({ status: 201, message: "Update address successfully" });
+};
+export const getAllUsers = async (req, res) => {
+  const response = await getAllUsersService();
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  }
+  return res.status(200).json({ status: 200, users: response.users });
 };
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;

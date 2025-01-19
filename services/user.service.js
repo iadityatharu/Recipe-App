@@ -51,6 +51,13 @@ export const updateAddres = async (userId, address) => {
   await User.findByIdAndUpdate(userId, { address });
   return { status: 201 };
 };
+export const getAllUsers = async () => {
+  const users = await User.find().select("-password -refreshToken -otp");
+  if (users.length === 0) {
+    return { status: 404 };
+  }
+  return users;
+};
 export const sendOtp = async (otp, email) => {
   const user = await User.findOne({ email });
   if (!user) {
