@@ -12,6 +12,22 @@ const orderSchema = new mongoose.Schema(
       ref: "Recipe",
       required: true,
     },
+    username: {
+      type: String,
+      required: true,
+    },
+    recipeTitle: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
     payment: {
       paymentId: { type: String, required: true },
       amount: { type: Number, required: true },
@@ -21,7 +37,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "notPurchased",
-      enum: ["notPurchased", "purchased", "cancelled", "pending"], // Add "pending" here
+      enum: ["notPurchased", "purchased", "cancelled", "pending"],
     },
   },
   { timestamps: true }

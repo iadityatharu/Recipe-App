@@ -32,7 +32,7 @@ router.get("/get-all-recipe", authentication, wrapAsync(getAllRecipe));
 router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
 router.get(
-  "/get-recipe-by-id/",
+  "/get-recipe-by-id/:id",
   authentication,
   wrapAsync(getSpecificRecipe)
 );
