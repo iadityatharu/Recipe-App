@@ -1,6 +1,5 @@
 import {
   addRecipe as addRecipeService,
-  updateRecipe as updateRecipeService,
   deleteRecipe as deleteRecipeService,
   getAllRecipe as getAllRecipeService,
   search as searchService,
@@ -48,11 +47,6 @@ export const addRecipe = async (req, res) => {
   });
 };
 
-export const updateRecipe = async (req, res) => {
-  const { recipeid } = req.headers;
-  const response = await updateRecipeService(recipeid, req.body);
-  return res.status(200).json({ status: 200, message: response });
-};
 export const deleteRecipe = async (req, res) => {
   const { recipeid } = req.body;
   const response = await deleteRecipeService(recipeid);

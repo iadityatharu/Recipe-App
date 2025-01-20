@@ -14,17 +14,6 @@ export const addRecipe = async (recipeData) => {
   await recipe.save();
   return "Recipe added successfully";
 };
-export const updateRecipe = async (recipeId, recipeData) => {
-  const { title, description, price, process, images } = recipeData;
-  await Recipe.findByIdAndUpdate(recipeId, {
-    title,
-    price,
-    description,
-    process,
-    images,
-  });
-  return "Recipe updated successfully";
-};
 export const deleteRecipe = async (recipeId) => {
   await Recipe.findByIdAndDelete(recipeId);
   return "Recipe Deleted successfully";
