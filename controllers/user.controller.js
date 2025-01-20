@@ -3,9 +3,9 @@ import { signin as signinService } from "../services/user.service.js";
 import { sendOtp as sendOtpService } from "../services/user.service.js";
 import { forgotPassword as forgotPasswordService } from "../services/user.service.js";
 import { changePassword as changePasswordService } from "../services/user.service.js";
+import { getUserRole as getUserRoleService } from "../services/user.service.js";
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
-import jwt from "jsonwebtoken";
 import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
@@ -47,7 +47,14 @@ export const signin = async (req, res) => {
     role: response.role,
   });
 };
-
+export const getUserRole = async (req, res) => {
+  const userId = req.user.authClaims.id;
+  const response = await getUserRoleService(userId);
+  if (response.status === 404) {
+    throw new expressError(404, "user not found");
+  }
+  return res.status(200).json(response);
+};
 
 export const getAllUsers = async (req, res) => {
   const response = await getAllUsersService();

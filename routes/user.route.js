@@ -9,6 +9,7 @@ import {
   getAllUsers,
   search,
   logout,
+  getUserRole,
   forgotPassword,
   changePassword,
   deleteUser,
@@ -25,6 +26,7 @@ router.patch(
   changePasswordCheck,
   wrapAsync(changePassword)
 );
+router.get("/get-user-role", authentication, wrapAsync(getUserRole));
 router.post("/send-otp", wrapAsync(sendOtp));
 router.get("/get-all-user", authentication, isAdmin, wrapAsync(getAllUsers));
 router.post("/forgot-password", wrapAsync(forgotPassword));

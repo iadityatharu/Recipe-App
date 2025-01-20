@@ -38,6 +38,10 @@ export const signin = async ({ email, password }) => {
   await existingUser.save();
   return { newAccessToken, role: existingUser.role };
 };
+export const getUserRole = async (userId) => {
+  const user = await User.findById(userId).select("role");
+  return user;
+};
 export const getAllUsers = async () => {
   const users = await User.find().select("-password  -otp");
   if (users.length === 0) {
