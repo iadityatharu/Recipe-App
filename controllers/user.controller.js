@@ -1,7 +1,5 @@
 import { signup as signupService } from "../services/user.service.js";
 import { signin as signinService } from "../services/user.service.js";
-import { getUserInfo as getUserInfoService } from "../services/user.service.js";
-import { updateAddres as updateAddresService } from "../services/user.service.js";
 import { sendOtp as sendOtpService } from "../services/user.service.js";
 import { forgotPassword as forgotPasswordService } from "../services/user.service.js";
 import { changePassword as changePasswordService } from "../services/user.service.js";
@@ -49,25 +47,8 @@ export const signin = async (req, res) => {
     role: response.role,
   });
 };
-export const getUserInfo = async (req, res) => {
-  const userId = req.user.authClaims.id;
-  const response = await getUserInfoService(userId);
-  if (response.status === 404) {
-    throw new expressError(404, "user not found");
-  }
-  return res.status(200).json({ status: 200, data: response });
-};
-export const updateAddress = async (req, res) => {
-  const userId = req.user.authClaims.id;
-  const { address } = req.body;
-  const response = await updateAddresService(userId, address);
-  if (response.status !== 201) {
-    throw new expressError(400, "Failed to update address");
-  }
-  return res
-    .status(201)
-    .json({ status: 201, message: "Update address successfully" });
-};
+
+
 export const getAllUsers = async (req, res) => {
   const response = await getAllUsersService();
   if (response.status === 404) {

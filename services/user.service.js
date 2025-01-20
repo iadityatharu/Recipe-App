@@ -38,21 +38,8 @@ export const signin = async ({ email, password }) => {
   await existingUser.save();
   return { newAccessToken, role: existingUser.role };
 };
-export const getUserInfo = async (userId) => {
-  const data = await User.findById(userId).select(
-    "-password -refreshToken -otp"
-  );
-  if (!data) {
-    return { status: 404 };
-  }
-  return data;
-};
-export const updateAddres = async (userId, address) => {
-  await User.findByIdAndUpdate(userId, { address });
-  return { status: 201 };
-};
 export const getAllUsers = async () => {
-  const users = await User.find().select("-password -refreshToken -otp");
+  const users = await User.find().select("-password  -otp");
   if (users.length === 0) {
     return { status: 404 };
   }

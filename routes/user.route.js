@@ -6,9 +6,7 @@ import { changePasswordCheck } from "../middleware/changePasswordCheck.js";
 import {
   signup,
   signin,
-  getUserInfo,
   getAllUsers,
-  updateAddress,
   search,
   logout,
   forgotPassword,
@@ -20,8 +18,6 @@ import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
 router.post("/signup", validUser, wrapAsync(signup));
 router.post("/signin", wrapAsync(signin));
-router.get("/get-user-information", authentication, wrapAsync(getUserInfo));
-router.patch("/update-address", authentication, wrapAsync(updateAddress));
 router.delete("/logout", authentication, wrapAsync(logout));
 router.patch(
   "/change-password",
