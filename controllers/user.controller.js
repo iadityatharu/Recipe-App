@@ -118,8 +118,7 @@ export const deleteUser = async (req, res) => {
   return res.status(200).json({ status: 200, message: response });
 };
 export const changePassword = async (req, res) => {
-  const token = req.cookies.refreshToken;
-  const { userId } = jwt.verify(token, process.env.REFRESHTOKEN);
+  const userId = req.user.authClaims.id;
   const { oldPassword, newPassword } = req.password;
   const response = await changePasswordService(
     userId,

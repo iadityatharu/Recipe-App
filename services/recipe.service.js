@@ -1,4 +1,5 @@
 import Recipe from "../model/recipe.model.js";
+import Order from "../model/order.model.js";
 export const addRecipe = async (recipeData) => {
   const { title, description, price, ingredients, process, images } =
     recipeData;
@@ -42,11 +43,8 @@ export const getAllRecipe = async () => {
 // };
 export const search = async (title, price) => {
   const query = {};
-
-  // Dynamically build the query
-  if (title) query.title = { $regex: title, $options: "i" }; // Case-insensitive search
-  if (price) query.price = price; // Exact match for price
-
+  if (title) query.title = { $regex: title, $options: "i" };
+  if (price) query.price = price;
   const response = await Recipe.find(query).select("-createdAt -updatedAt");
   return response;
 };
@@ -58,7 +56,21 @@ export const getRecentRecipe = async () => {
     .limit(4);
   return recipes;
 };
-export const getSpecificRecipe = async (id) => {
-  const recipe = await Recipe.findById(id);
-  return recipe;
+export const getSpecificRecipe = async (userId, recipeId) => {
+  const order = await Order.findOne({
+    user: userId,
+    recipe: recipeId,
+    "payment.status": "purchased",
+  });
+  if (!order) {
+    return {
+      status: 404,
+      message: "Order not found or payment not completed.",
+    };
+  }
+  const recipe = await Recipe.findById(recipeId);
+  if (!recipe) {
+    return { status: 404, message: "Recipe not found." };
+  }
+  return { status: 200, data: recipe };
 };
