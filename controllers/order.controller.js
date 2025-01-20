@@ -37,7 +37,6 @@ export const orderHistory = async (req, res) => {
   }
   return res.status(200).json({ status: 200, data: ordersData });
 };
-// Controller to get all orders (admin)
 export const getAllOrder = async (req, res) => {
   const orders = await getAllOrderService();
   if (!orders || orders.length === 0) {
