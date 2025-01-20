@@ -6,8 +6,8 @@ const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 export const placeOrder = async (userId, recipeId, paymentMethodId) => {
   const [user, recipe] = await Promise.all([
-    User.findById(userId).select("firstname address phone"),
-    Recipe.findById(recipeId),
+    User.findById(userId).select("firstname middlename lastname address phone"),
+    Recipe.findById(recipeId).select("title price"),
   ]);
 
   if (!user) {
@@ -17,10 +17,10 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     throw { statusCode: 404, message: "Recipe not found" };
   }
 
-  const { firstname, address, phone } = user;
+  const { firstname, middlename, lastname, address, phone } = user;
   const { title, price } = recipe;
 
-  // Create payment intent
+  const fullName = [firstname, middlename, lastname].filter(Boolean).join(" ");
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(price * 100),
     currency: "usd",
@@ -32,12 +32,11 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
   if (paymentIntent.status !== "succeeded") {
     throw { statusCode: 402, message: "Payment confirmation failed" };
   }
-
-  // Create and save the order
   const order = await new Order({
     user: userId,
     recipe: recipeId,
-    username: firstname,
+    username: fullName,
+    recipeTitle: title,
     address,
     phone,
     payment: {
@@ -53,7 +52,6 @@ export const placeOrder = async (userId, recipeId, paymentMethodId) => {
     { $push: { orders: order._id } },
     { new: true }
   );
-
   return {
     statusCode: 200,
     message: "Order placed successfully",
@@ -83,7 +81,6 @@ export const orderHistory = async (userId) => {
       });
     }
   }
-
   return ordersWithRecipeTitles.reverse();
 };
 
