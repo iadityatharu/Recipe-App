@@ -60,7 +60,7 @@ export const getSpecificRecipe = async (userId, recipeId) => {
   const order = await Order.findOne({
     user: userId,
     recipe: recipeId,
-    "payment.status": "purchased",
+    status: "purchased",
   });
   if (!order) {
     return {
@@ -72,5 +72,6 @@ export const getSpecificRecipe = async (userId, recipeId) => {
   if (!recipe) {
     return { status: 404, message: "Recipe not found." };
   }
+
   return { status: 200, data: recipe };
 };
