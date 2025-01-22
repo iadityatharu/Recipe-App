@@ -7,6 +7,8 @@ import {
   signup,
   signin,
   getAllUsers,
+  getUserInfo,
+  changeRole,
   search,
   logout,
   getUserRole,
@@ -30,8 +32,13 @@ router.get("/get-user-role", authentication, wrapAsync(getUserRole));
 router.post("/send-otp", wrapAsync(sendOtp));
 router.get("/get-all-user", authentication, isAdmin, wrapAsync(getAllUsers));
 router.post("/forgot-password", wrapAsync(forgotPassword));
-router.get("/get-user-info",authentication,wrapAsync())
+router.get("/get-user-info", authentication, wrapAsync(getUserInfo));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
-router.patch("/change-user-role", authentication,isAdmin,wrapAsync());
+router.patch(
+  "/change-user-role",
+  authentication,
+  isAdmin,
+  wrapAsync(changeRole)
+);
 export default router;
