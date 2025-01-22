@@ -8,7 +8,6 @@ import {
   getRecentRecipe,
   getSpecificRecipe,
   search,
-  updateRecipe,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import { upload, uploadImageHandler } from "../middleware/cloudinary.js";
