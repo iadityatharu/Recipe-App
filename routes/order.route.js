@@ -13,6 +13,7 @@ const router = express.Router();
 router.post("/place-order", authentication, wrapAsync(placeOrder));
 // get order-history of particular user
 router.get("/get-order-history", authentication, wrapAsync(orderHistory));
+router.delete("/delete-order/:id", authentication, isAdmin, wrapAsync());
 
 // get all orders ---admin
 router.get("/get-all-order", authentication, isAdmin, wrapAsync(getAllOrder));
