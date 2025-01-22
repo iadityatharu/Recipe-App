@@ -64,7 +64,7 @@ export const forgotPassword = async (email, otp, password) => {
     return { status: 404 };
   }
   // Check if OTP is correct and not expired
-  const isOtpValid = (otp) => otp === user.otp;
+  const isOtpValid = otp === user.otp;
   if (!isOtpValid) {
     return { status: 403 };
   }
