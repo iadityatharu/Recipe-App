@@ -33,4 +33,5 @@ router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/get-user-info",authentication,wrapAsync())
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
+router.patch("/change-user-role", authentication,isAdmin,wrapAsync());
 export default router;
