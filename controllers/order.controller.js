@@ -46,7 +46,7 @@ export const getAllOrder = async (req, res) => {
   return res.status(200).json({ status: 200, data: orders });
 };
 export const deleteOrder = async (req, res) => {
-  const orderId = req.params;
+  const orderId = req.params.id;
   if (!orderId) {
     throw new expressError(404, "Order id required");
   }

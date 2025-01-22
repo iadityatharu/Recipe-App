@@ -83,7 +83,7 @@ export const orderHistory = async (userId) => {
   }
   return ordersWithRecipeTitles.reverse();
 };
-export const deleteOrder = async () => {
+export const deleteOrder = async (orderId) => {
   const response = await Order.findByIdAndDelete(orderId);
   return "order deleted successfully";
 };
