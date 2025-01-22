@@ -126,7 +126,7 @@ export const changePassword = async (req, res) => {
   } else if (response.status === 401) {
     throw new expressError(401, "Invalid credentials");
   } else {
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
     res
       .status(201)
       .json({ status: 201, message: "password change successfully" });
