@@ -3,6 +3,7 @@ import {
   orderHistory as orderHistoryService,
   getAllOrder as getAllOrderService,
   search as searchService,
+  deleteOrder as deleteOrderService,
 } from "../services/order.service.js";
 import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
@@ -43,6 +44,14 @@ export const getAllOrder = async (req, res) => {
     throw new expressError(404, "No orders found");
   }
   return res.status(200).json({ status: 200, data: orders });
+};
+export const deleteOrder = async (req, res) => {
+  const orderId = req.params;
+  if (!orderId) {
+    throw new expressError(404, "Order id required");
+  }
+  const response = await deleteOrderService(orderId);
+  return res.status(200).json({ message: response });
 };
 export const search = async (req, res) => {
   const { username, recipe, phone, address, status } = req.body;
