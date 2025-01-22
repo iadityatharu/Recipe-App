@@ -85,11 +85,6 @@ export const getUserInfo = async (userId) => {
   );
   return response;
 };
-export const changeRole = async ({ role }) => {
-  const userId = req.user.authClaims.id;
-  const user = await User.findByIdAndUpdate(userId, { role });
-  return "Role change successfully";
-};
 export const changePassword = async (userId, oldPassword, newPassword) => {
   const user = await User.findById(userId);
   if (!user) {

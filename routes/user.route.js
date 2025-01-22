@@ -7,8 +7,7 @@ import {
   signup,
   signin,
   getAllUsers,
-  getUserInfo,
-  changeRole,
+  getUserInfo, 
   search,
   logout,
   getUserRole,
@@ -35,10 +34,4 @@ router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/get-user-info", authentication, wrapAsync(getUserInfo));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
-router.patch(
-  "/change-user-role",
-  authentication,
-  isAdmin,
-  wrapAsync(changeRole)
-);
 export default router;

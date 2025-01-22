@@ -7,7 +7,6 @@ import { getUserRole as getUserRoleService } from "../services/user.service.js";
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
 import { getUserInfo as getUserInfoService } from "../services/user.service.js";
-import { changeRole as changeRoleService } from "../services/user.service.js";
 import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
@@ -71,17 +70,7 @@ export const getUserInfo = async (req, res) => {
     throw new expressError(404, "User not found");
   }
   const response = await getUserInfoService(userId);
-  // console.log(response);
   return res.status(200).json(response);
-};
-export const changeRole = async (req, res) => {
-  const { role } = req.body;
-  if (!role) {
-    throw new expressError(404, "Role required");
-  }
-  const response = await changeRoleService(role);
-
-  return res.status(200).json({ message: response });
 };
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;
