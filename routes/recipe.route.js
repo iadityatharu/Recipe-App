@@ -8,6 +8,7 @@ import {
   getRecentRecipe,
   getSpecificRecipe,
   search,
+  updateRecipe,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import { upload, uploadImageHandler } from "../middleware/cloudinary.js";
@@ -30,7 +31,6 @@ router.delete(
 router.get("/get-all-recipe", wrapAsync(getAllRecipe));
 router.get("/get-recent-recipe", wrapAsync(getRecentRecipe));
 router.get("/search", authentication, wrapAsync(search));
-router.put("/update-recipe/:id",authentication,isAdmin,wrapAsync())
 router.get(
   "/get-recipe-by-id/:id",
   authentication,
