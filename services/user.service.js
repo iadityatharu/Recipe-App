@@ -79,8 +79,10 @@ export const deleteUser = async (userId) => {
   await User.findByIdAndDelete(userId);
   return "User deleted successfully";
 };
-export const getUserInfo = async ({ userId }) => {
-  const response = await User.findById(userId).select("-otp -password");
+export const getUserInfo = async (userId) => {
+  const response = await User.findById(userId).select(
+    "-otp -password -favourites -orders -createdAt -updatedAt -__v"
+  );
   return response;
 };
 export const changeRole = async ({ userId, role }) => {

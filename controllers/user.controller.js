@@ -71,6 +71,7 @@ export const getUserInfo = async (req, res) => {
     throw new expressError(404, "User not found");
   }
   const response = await getUserInfoService(userId);
+  // console.log(response);
   return res.status(200).json(response);
 };
 export const changeRole = async (req, res) => {
