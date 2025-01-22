@@ -76,11 +76,10 @@ export const getUserInfo = async (req, res) => {
 };
 export const changeRole = async (req, res) => {
   const { role } = req.body;
-  const userId = req.user.authClaims.id;
-  if (!role && !userId) {
-    throw new expressError(404, "user not found");
+  if (!role) {
+    throw new expressError(404, "Role required");
   }
-  const response = await changeRoleService(userId, role);
+  const response = await changeRoleService(role);
 
   return res.status(200).json({ message: "Change role success" });
 };
