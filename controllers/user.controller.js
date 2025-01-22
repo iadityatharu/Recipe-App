@@ -81,7 +81,7 @@ export const changeRole = async (req, res) => {
   }
   const response = await changeRoleService(role);
 
-  return res.status(200).json({ message: "Change role success" });
+  return res.status(200).json({ message: response });
 };
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;
