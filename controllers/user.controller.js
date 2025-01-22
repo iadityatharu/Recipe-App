@@ -6,6 +6,8 @@ import { changePassword as changePasswordService } from "../services/user.servic
 import { getUserRole as getUserRoleService } from "../services/user.service.js";
 import { search as searchService } from "../services/user.service.js";
 import { expressError } from "../utils/expressError.js";
+import { getUserInfo as getUserInfoService } from "../services/user.service.js";
+import { changeRole as changeRoleService } from "../services/user.service.js";
 import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
@@ -63,7 +65,24 @@ export const getAllUsers = async (req, res) => {
   }
   return res.status(200).json(response);
 };
+export const getUserInfo = async (req, res) => {
+  const userId = req.user.authClaims.id;
+  if (!userId) {
+    throw new expressError(404, "User not found");
+  }
+  const response = await getUserInfoService(userId);
+  return res.status(200).json(response);
+};
+export const changeRole = async (req, res) => {
+  const { role } = req.body;
+  const userId = req.user.authClaims.id;
+  if (!role && !userId) {
+    throw new expressError(404, "user not found");
+  }
+  const response = await changeRoleService(userId, role);
 
+  return res.status(200).json({ message: "Change role success" });
+};
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;
   if (!incomingAccessToken) {

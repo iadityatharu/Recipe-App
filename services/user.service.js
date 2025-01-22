@@ -79,7 +79,14 @@ export const deleteUser = async (userId) => {
   await User.findByIdAndDelete(userId);
   return "User deleted successfully";
 };
-
+export const getUserInfo = async ({ userId }) => {
+  const response = await User.findById(userId).select("-otp -password");
+  return response;
+};
+export const changeRole = async ({ userId, role }) => {
+  const user = await User.findByIdAndUpdate(userId, { role });
+  return "Role change successfully";
+};
 export const changePassword = async (userId, oldPassword, newPassword) => {
   const user = await User.findById(userId);
   if (!user) {
