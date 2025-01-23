@@ -57,7 +57,11 @@ export const getRecentRecipe = async () => {
     .limit(4);
   return recipes;
 };
-export const getSpecificRecipe = async (userId, recipeId) => {
+export const getSpecificRecipe = async (userId, recipeId, role) => {
+  if (role === "admin") {
+    const recipe = await Recipe.findById(recipeId);
+    return { status: 200, data: recipe };
+  }
   const order = await Order.findOne({
     user: userId,
     recipe: recipeId,
