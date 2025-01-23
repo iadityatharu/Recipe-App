@@ -7,9 +7,7 @@ import {
   getAllCart,
 } from "../controllers/cart.controller.js";
 const router = express.Router();
-// put book in cart
 router.put("/add-to-cart/:recipeid", authentication, wrapAsync(addToCart));
-// remove book from cart
 router.put(
   "/remove-recipe-from-cart/:recipeid",
   authentication,
