@@ -14,6 +14,18 @@ export const addRecipe = async (recipeData) => {
   await recipe.save();
   return "Recipe added successfully";
 };
+export const updateRecipe = async (id, updateData) => {
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    return { status: 404 };
+  }
+  Object.keys(updateData).forEach((key) => {
+    recipe[key] = updateData[key];
+  });
+  await recipe.save();
+  return recipe;
+};
+
 export const deleteRecipe = async (recipeId) => {
   await Recipe.findByIdAndDelete(recipeId);
   return "Recipe Deleted successfully";

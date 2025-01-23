@@ -7,6 +7,7 @@ import {
   getAllRecipe,
   getRecentRecipe,
   getSpecificRecipe,
+  updateRecipe,
   search,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
@@ -34,5 +35,11 @@ router.get(
   "/get-recipe-by-id/:id",
   authentication,
   wrapAsync(getSpecificRecipe)
+);
+router.put(
+  "/update-recipe/:id",
+  authentication,
+  isAdmin,
+  wrapAsync(updateRecipe)
 );
 export default router;
