@@ -21,5 +21,5 @@ export const removeFromCart = async (req, res) => {
 export const getAllCart = async (req, res) => {
   const userId = req.user.authClaims.id;
   const cart = await getAllCartService(userId);
-  return res.status(200).json({ data: cart });
+  return res.status(200).json({ data:cart });
 };

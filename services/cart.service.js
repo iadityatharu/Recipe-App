@@ -16,6 +16,5 @@ export const removeCart = async (recipeid, userId) => {
 };
 export const getAllCart = async (userId) => {
   const userData = await User.findById(userId).populate("carts");
-  console.log(userData.carts);
   return userData.carts;
 };
