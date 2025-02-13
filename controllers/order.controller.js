@@ -12,21 +12,42 @@ export const placeOrder = async (req, res) => {
   if (!recipeId || !paymentMethodId) {
     return res.status(400).json({
       status: 400,
-      message: "Recipe ID and Payment Method ID are required",
+      message: "Recipe IDs and Payment Method ID are required",
     });
   }
+  // Split the comma-separated recipeIds string into an array
+  const recipeIdsArray = recipeId.split(",");
+
+  if (!Array.isArray(recipeIdsArray) || recipeIdsArray.length === 0) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid recipe IDs format",
+    });
+  }
+
   try {
-    const response = await placeOrderService(userId, recipeId, paymentMethodId);
-    return res.status(response.statusCode).json({
-      status: response.statusCode,
-      message: response.message,
-      orderId: response.orderId,
-      paymentStatus: response.paymentStatus,
+    // Process each recipe order in parallel
+    const orderResponses = await Promise.all(
+      recipeIdsArray.map((recipeId) =>
+        placeOrderService(userId, recipeId, paymentMethodId)
+      )
+    );
+
+    return res.status(200).json({
+      status: 200,
+      message: "Orders placed successfully",
+      orders: orderResponses.map((response, index) => ({
+        recipeId: recipeIdsArray[index],
+        orderId: response.orderId,
+        paymentStatus: response.paymentStatus,
+        message: response.message,
+      })),
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    const message = error.message || "An unexpected error occurred";
-    return res.status(statusCode).json({ status: statusCode, message });
+    return res.status(error.statusCode || 500).json({
+      status: error.statusCode || 500,
+      message: error.message || "An unexpected error occurred",
+    });
   }
 };
 
