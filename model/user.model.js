@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
     ],
     otp: {
       type: Number,
-      default: () => new Date(Date.now() + 2 * 60 * 1000), // Default to 2 minutes from now
+      default: () => new Date(Date.now() + 2 * 60 * 1000),
     },
   },
   { timestamps: true }
