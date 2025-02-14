@@ -115,3 +115,10 @@ export const search = async (firstname, lastname, phone, email) => {
   }
   return { users };
 };
+export const getTotalUser = async () => {
+  const count = await User.countDocuments();
+  if (count === 0) {
+    return { status: 404, message: "No user found." };
+  }
+  return count;
+};
