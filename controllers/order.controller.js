@@ -5,6 +5,7 @@ import {
   search as searchService,
   deleteOrder as deleteOrderService,
   getTotalOrder as getTotalOrderService,
+  totalSale as totalSaleService,
 } from "../services/order.service.js";
 import { expressError } from "../utils/expressError.js";
 export const placeOrder = async (req, res) => {
@@ -94,6 +95,14 @@ export const search = async (req, res) => {
 };
 export const getTotalOrder = async (req, res) => {
   const response = await getTotalOrderService();
+  if (!response) {
+    throw new expressError(404, "No orders found");
+  }
+  return res.status(200).json({ status: 200, data: response });
+};
+
+export const totalSale = async (req, res) => {
+  const response = await totalSaleService();
   if (!response) {
     throw new expressError(404, "No orders found");
   }
