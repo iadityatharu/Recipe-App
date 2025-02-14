@@ -7,7 +7,7 @@ import {
   signup,
   signin,
   getAllUsers,
-  getUserInfo, 
+  getUserInfo,
   search,
   logout,
   getUserRole,
@@ -15,6 +15,7 @@ import {
   changePassword,
   deleteUser,
   sendOtp,
+  getTotalUser,
 } from "../controllers/user.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -34,4 +35,5 @@ router.post("/forgot-password", wrapAsync(forgotPassword));
 router.get("/get-user-info", authentication, wrapAsync(getUserInfo));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
+router.get("/total-user", authentication, isAdmin, wrapAsync(getTotalUser));
 export default router;
