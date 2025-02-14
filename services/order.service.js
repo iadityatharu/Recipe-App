@@ -174,3 +174,11 @@ export const search = async (username, recipe, phone, address, status) => {
   }).select("-createdAt -updatedAt");
   return order;
 };
+
+export const getTotalOrder = async () => {
+  const totalOrder = await Order.countDocuments();
+  if (totalOrder === 0) {
+    return { status: 404, message: "No order found" };
+  }
+  return totalOrder;
+};
