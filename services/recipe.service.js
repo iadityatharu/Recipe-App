@@ -81,8 +81,8 @@ export const getSpecificRecipe = async (userId, recipeId, role) => {
   return { status: 200, data: recipe };
 };
 export const getTotalRecipe = async () => {
-  const count = await Recipe.find().count();
-  if(!count) {
+  const count = await Recipe.countDocuments(); // Use countDocuments instead
+  if (count === 0) {
     return { status: 404, message: "No recipe found." };
   }
   return count;
