@@ -204,9 +204,9 @@ export const monthlySale = async () => {
   const orders = await Order.find({
     "payment.date": { $gte: startOfMonth, $lte: endOfMonth },
   });
+  console.log(orders);
   const totalSum = orders.reduce((sum, order) => {
     return sum + order.payment.amount;
   }, 0);
-
   return totalSum;
 };
