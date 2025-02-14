@@ -182,3 +182,10 @@ export const getTotalOrder = async () => {
   }
   return totalOrder;
 };
+export const totalSale = async () => {
+  const orders = await Order.find();
+  const totalSum = orders.reduce((sum, order) => {
+    return sum + order.payment.amount;
+  }, 0);
+  return totalSum;
+};
