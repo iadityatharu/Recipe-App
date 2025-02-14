@@ -2,135 +2,80 @@ import stripePackage from "stripe";
 import User from "../model/user.model.js";
 import Order from "../model/order.model.js";
 import Recipe from "../model/recipe.model.js";
-const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
+const stripeInstance = stripePackage(process.env.STRIPE_SECRET_KEY);
 
-export const placeOrder = async (userId, recipeId, paymentMethodId) => {
+export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
   try {
-    const [user, recipe] = await Promise.all([
-      User.findById(userId).select(
-        "firstname middlename lastname address phone stripeCustomerId"
-      ),
-      Recipe.findById(recipeId).select("title price"),
-    ]);
-
-    if (!user) {
-      throw { statusCode: 404, message: "User not found" };
+    if (!userId || !recipeIds.length || !paymentMethodId) {
+      throw new Error("Missing required fields");
     }
-    if (!recipe) {
-      throw { statusCode: 404, message: "Recipe not found" };
-    }
+    // Fetch user and recipes
+    const user = await User.findById(userId).select(
+      "firstname middlename lastname email phone address" // Fetching address here
+    );
+    if (!user) throw new Error("User not found");
 
-    const {
-      firstname,
-      middlename,
-      lastname,
-      address,
-      phone,
-      stripeCustomerId,
-    } = user;
-    const { title, price } = recipe;
+    const recipes = await Recipe.find({ _id: { $in: recipeIds } });
+    if (recipes.length !== recipeIds.length)
+      throw new Error("One or more recipes not found");
 
-    const fullName = [firstname, middlename, lastname]
-      .filter(Boolean)
-      .join(" ");
+    // Calculate total amount
+    const totalAmount = recipes.reduce((sum, recipe) => sum + recipe.price, 0);
 
-    // If user doesn't have a stripeCustomerId, create a new Stripe Customer
-    let stripeCustomer = stripeCustomerId;
-    if (!stripeCustomer) {
-      const newStripeCustomer = await stripe.customers.create({
-        email: user.email, // Optional: You can store the email
-        name: fullName,
-        phone: user.phone, // Optional
-      });
-
-      stripeCustomer = newStripeCustomer.id;
-
-      // Save stripeCustomerId to the user's database
-      user.stripeCustomerId = stripeCustomer;
-      await user.save();
-    }
-
-    // Check if the payment method is already attached to a customer
-    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
-    if (paymentMethod.customer) {
-      // Detach the payment method if it's attached to a different customer
-      if (paymentMethod.customer !== stripeCustomer) {
-        await stripe.paymentMethods.detach(paymentMethodId);
-      }
-    }
-
-    // Attach the payment method to the Stripe customer
-    await stripe.paymentMethods.attach(paymentMethodId, {
-      customer: stripeCustomer,
-    });
-
-    // Optionally, set the payment method as the default for the customer
-    await stripe.customers.update(stripeCustomer, {
-      invoice_settings: { default_payment_method: paymentMethodId },
-    });
-
-    // Create the payment intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(price * 100), // Convert to cents
+    // Process payment with Stripe
+    const paymentIntent = await stripeInstance.paymentIntents.create({
+      amount: totalAmount * 100,
       currency: "usd",
       payment_method: paymentMethodId,
-      customer: stripeCustomer, // Attach the customer
       confirm: true,
-      automatic_payment_methods: { enabled: true, allow_redirects: "never" },
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: "never",
+      },
     });
 
     if (paymentIntent.status !== "succeeded") {
-      throw { statusCode: 402, message: "Payment confirmation failed" };
+      throw new Error("Payment failed");
     }
 
-    // Create an order and save it to the database
-    const order = await new Order({
+    // Create username by combining firstname, middlename, and lastname
+    const username = [user.firstname, user.middlename, user.lastname]
+      .filter(Boolean)
+      .join(" ");
+
+    // Create and save the order
+    const newOrder = new Order({
       user: userId,
-      recipe: recipeId,
-      username: fullName,
-      recipeTitle: title,
-      address,
-      phone,
+      recipe: recipeIds,
+      username: username, // Use the generated username
+      recipeTitle: recipes.map((r) => r.title).join(", "), // Combine recipe titles
+      phone: user.phone,
+      address: user.address, // Fetch address from user model
       payment: {
         paymentId: paymentIntent.id,
-        amount: price,
+        amount: totalAmount,
         currency: "usd",
-        status: paymentIntent.status,
+        status: "succeeded",
       },
       status: "purchased",
-    }).save();
+    });
 
-    // Add the order to the user's orders list
-    await User.findByIdAndUpdate(
-      userId,
-      { $push: { orders: order._id } },
-      { new: true }
-    );
+    await newOrder.save();
+
+    // ✅ Clear cart: Remove ordered items from user's cart
+    await User.findByIdAndUpdate(userId, {
+      $pull: { carts: { $in: recipeIds } }, // Removes multiple recipes from cart
+    });
 
     return {
-      statusCode: 200,
+      success: true,
       message: "Order placed successfully",
-      orderId: order._id,
-      paymentStatus: paymentIntent.status,
     };
   } catch (error) {
-    // Handle payment method attachment errors
-    if (error.message && error.message.includes("already been attached")) {
-      // Payment method is attached to another customer. You can prompt the user to enter a new card.
-      throw {
-        statusCode: 402,
-        message:
-          "The payment method has already been attached to another customer. Please use a different payment method.",
-      };
-    }
-
-    throw {
-      statusCode: error.statusCode || 500,
-      message: error.message || "An unexpected error occurred",
-    };
+    console.error("Error placing order:", error.message);
+    return { success: false, message: error.message };
   }
 };
-
 export const orderHistory = async (userId) => {
   const userData = await User.findById(userId).select("orders").populate({
     path: "orders",
@@ -140,24 +85,45 @@ export const orderHistory = async (userId) => {
 
   if (userData && userData.orders) {
     for (const order of userData.orders) {
-      const recipe = await Recipe.findById(order.recipe.toString()).select(
+      // Retrieve all recipes for the order
+      const recipes = await Recipe.find({ _id: { $in: order.recipe } }).select(
         "title"
       );
+      const recipeTitles = recipes.map((recipe) => recipe.title);
+
       ordersWithRecipeTitles.push({
         orderId: order._id,
-        recipeId: order.recipe,
-        recipeTitle: recipe ? recipe.title : "Unknown Recipe",
+        recipeIds: order.recipe, 
+        recipeTitles:
+          recipeTitles.length > 0 ? recipeTitles : ["Unknown Recipe"],
         price: order.payment.amount,
         purchaseDate: order.createdAt,
       });
     }
   }
+
   return ordersWithRecipeTitles.reverse();
 };
+
 export const deleteOrder = async (orderId) => {
+  const order = await Order.findById(orderId).select("user");
+  const userId = order ? order.user : null; 
+  if (userId) {
+    await User.findByIdAndUpdate(userId, {
+      $pull: { orders: orderId }, 
+    });
+  }
+
+  // Delete the order
   const response = await Order.findByIdAndDelete(orderId);
-  return "order deleted successfully";
+
+  if (response) {
+    return "Order deleted successfully";
+  } else {
+    throw new Error("Order not found");
+  }
 };
+
 export const getAllOrder = async () => {
   const orders = await Order.find({}).sort({ createdAt: -1 });
   return orders;
@@ -189,24 +155,17 @@ export const totalSale = async () => {
   }, 0);
   return totalSum;
 };
-export const monthlySale = async () => {
-  const currentDate = new Date();
-  const startOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    1
-  );
-  const endOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    0
-  );
+export const monthlySale = async (year, month) => {
+  const startOfMonth = new Date(year, month - 1, 1); // month is 1-based (Jan is 1)
+  const endOfMonth = new Date(year, month, 0); // Last day of the month
+
   const orders = await Order.find({
     "payment.date": { $gte: startOfMonth, $lte: endOfMonth },
   });
-  console.log(orders);
+
   const totalSum = orders.reduce((sum, order) => {
     return sum + order.payment.amount;
   }, 0);
+
   return totalSum;
 };
