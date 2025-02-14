@@ -109,8 +109,15 @@ export const totalSale = async (req, res) => {
   }
   return res.status(200).json({ status: 200, data: response });
 };
+// controller
 export const monthlySale = async (req, res) => {
-  const response = await monthlySaleService();
+  const { year, month } = req.query;
+  if (!year || !month) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Year and month are required." });
+  }
+  const response = await monthlySaleService(parseInt(year), parseInt(month));
   if (!response) {
     throw new expressError(404, "No orders found");
   }
