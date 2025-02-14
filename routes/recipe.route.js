@@ -9,6 +9,7 @@ import {
   getSpecificRecipe,
   updateRecipe,
   search,
+  getTotalRecipe,
 } from "../controllers/recipe.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import { upload, uploadImageHandler } from "../middleware/cloudinary.js";
@@ -42,4 +43,5 @@ router.put(
   isAdmin,
   wrapAsync(updateRecipe)
 );
+router.get("/total-recipe", authentication, isAdmin, wrapAsync(getTotalRecipe));
 export default router;
