@@ -189,3 +189,24 @@ export const totalSale = async () => {
   }, 0);
   return totalSum;
 };
+export const monthlySale = async () => {
+  const currentDate = new Date();
+  const startOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const endOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+  const orders = await Order.find({
+    "payment.date": { $gte: startOfMonth, $lte: endOfMonth },
+  });
+  const totalSum = orders.reduce((sum, order) => {
+    return sum + order.payment.amount;
+  }, 0);
+
+  return totalSum;
+};
