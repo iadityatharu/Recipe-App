@@ -142,5 +142,5 @@ export const search = async (req, res) => {
 };
 export const getTotalUser = async (req, res) => {
   const total = await getTotalUserService();
-  return res.status(200).json({ data: total });
+  return res.status(200).json({status:200, data: total });
 };
