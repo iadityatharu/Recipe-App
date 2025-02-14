@@ -9,6 +9,7 @@ import {
   search,
   getTotalOrder,
   totalSale,
+  monthlySale,
 } from "../controllers/order.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -28,4 +29,5 @@ router.get("/get-all-order", authentication, isAdmin, wrapAsync(getAllOrder));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.get("/total-order", authentication, isAdmin, wrapAsync(getTotalOrder));
 router.get("/total-sale", authentication, isAdmin, wrapAsync(totalSale));
+router.get("/monthly-sale", authentication, isAdmin, wrapAsync(monthlySale));
 export default router;
