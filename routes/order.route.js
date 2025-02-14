@@ -7,6 +7,7 @@ import {
   orderHistory,
   placeOrder,
   search,
+  getTotalOrder,
 } from "../controllers/order.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -24,4 +25,5 @@ router.delete(
 // get all orders ---admin
 router.get("/get-all-order", authentication, isAdmin, wrapAsync(getAllOrder));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
+router.get("/total-order", authentication, isAdmin, wrapAsync(getTotalOrder));
 export default router;
