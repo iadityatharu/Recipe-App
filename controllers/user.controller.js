@@ -9,6 +9,7 @@ import { expressError } from "../utils/expressError.js";
 import { getUserInfo as getUserInfoService } from "../services/user.service.js";
 import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
+import { getTotalUser as getTotalUserService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
@@ -138,4 +139,8 @@ export const search = async (req, res) => {
     throw new expressError(404, "user not found");
   }
   return res.status(200).json({ status: 200, users: response.users });
+};
+export const getTotalUser = async (req, res) => {
+  const total = await getTotalUserService();
+  return res.status(200).json({ data: total });
 };
