@@ -6,6 +6,7 @@ import {
   updateRecipe as updateRecipeService,
   getRecentRecipe as getRecentRecipeService,
   getSpecificRecipe as getSpecificRecipeService,
+  getTotalRecipe as getTotalRecipeService,
 } from "../services/recipe.service.js";
 import { expressError } from "../utils/expressError.js";
 export const addRecipe = async (req, res) => {
@@ -132,4 +133,8 @@ export const getSpecificRecipe = async (req, res) => {
   const role = req.user.authClaims.role;
   const recipe = await getSpecificRecipeService(userId, id, role);
   return res.status(200).json({ status: 200, data: recipe.data });
+};
+export const getTotalRecipe = async (req, res) => {
+  const total = await getTotalRecipeService();
+  return res.status(200).json({ status: 200, data: total });
 };
