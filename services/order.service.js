@@ -9,20 +9,14 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
     if (!userId || !recipeIds.length || !paymentMethodId) {
       throw new Error("Missing required fields");
     }
-    // Fetch user and recipes
     const user = await User.findById(userId).select(
-      "firstname middlename lastname email phone address" // Fetching address here
+      "firstname middlename lastname email phone address orders"
     );
     if (!user) throw new Error("User not found");
-
     const recipes = await Recipe.find({ _id: { $in: recipeIds } });
     if (recipes.length !== recipeIds.length)
       throw new Error("One or more recipes not found");
-
-    // Calculate total amount
     const totalAmount = recipes.reduce((sum, recipe) => sum + recipe.price, 0);
-
-    // Process payment with Stripe
     const paymentIntent = await stripeInstance.paymentIntents.create({
       amount: totalAmount * 100,
       currency: "usd",
@@ -37,20 +31,16 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
     if (paymentIntent.status !== "succeeded") {
       throw new Error("Payment failed");
     }
-
-    // Create username by combining firstname, middlename, and lastname
     const username = [user.firstname, user.middlename, user.lastname]
       .filter(Boolean)
       .join(" ");
-
-    // Create and save the order
     const newOrder = new Order({
       user: userId,
       recipe: recipeIds,
-      username: username, // Use the generated username
-      recipeTitle: recipes.map((r) => r.title).join(", "), // Combine recipe titles
+      username: username,
+      recipeTitle: recipes.map((r) => r.title).join(", "),
       phone: user.phone,
-      address: user.address, // Fetch address from user model
+      address: user.address,
       payment: {
         paymentId: paymentIntent.id,
         amount: totalAmount,
@@ -59,64 +49,47 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
       },
       status: "purchased",
     });
-
     await newOrder.save();
-
-    // ✅ Clear cart: Remove ordered items from user's cart
     await User.findByIdAndUpdate(userId, {
-      $pull: { carts: { $in: recipeIds } }, // Removes multiple recipes from cart
+      $pull: { carts: { $in: recipeIds } },
+      $push: { orders: newOrder._id },
     });
-
     return {
       success: true,
       message: "Order placed successfully",
     };
   } catch (error) {
-    console.error("Error placing order:", error.message);
     return { success: false, message: error.message };
   }
 };
+
 export const orderHistory = async (userId) => {
-  const userData = await User.findById(userId).select("orders").populate({
-    path: "orders",
-  });
-
-  const ordersWithRecipeTitles = [];
-
-  if (userData && userData.orders) {
-    for (const order of userData.orders) {
-      // Retrieve all recipes for the order
-      const recipes = await Recipe.find({ _id: { $in: order.recipe } }).select(
-        "title"
-      );
-      const recipeTitles = recipes.map((recipe) => recipe.title);
-
-      ordersWithRecipeTitles.push({
+  const orders = await Order.find({ user: userId }).populate("recipe");
+  if (orders.length > 0) {
+    const orderDetails = orders.flatMap((order) =>
+      order.recipe.map((recipe) => ({
         orderId: order._id,
-        recipeIds: order.recipe, 
-        recipeTitles:
-          recipeTitles.length > 0 ? recipeTitles : ["Unknown Recipe"],
-        price: order.payment.amount,
-        purchaseDate: order.createdAt,
-      });
-    }
+        recipeId: recipe._id,
+        recipeTitle: recipe.title,
+        recipePrice: recipe.price,
+        purchasedDate: order.createdAt,
+      }))
+    );
+    return orderDetails;
+  } else {
+    return "No order history found";
   }
-
-  return ordersWithRecipeTitles.reverse();
 };
 
 export const deleteOrder = async (orderId) => {
   const order = await Order.findById(orderId).select("user");
-  const userId = order ? order.user : null; 
+  const userId = order ? order.user : null;
   if (userId) {
     await User.findByIdAndUpdate(userId, {
-      $pull: { orders: orderId }, 
+      $pull: { orders: orderId },
     });
   }
-
-  // Delete the order
   const response = await Order.findByIdAndDelete(orderId);
-
   if (response) {
     return "Order deleted successfully";
   } else {
