@@ -16,6 +16,7 @@ import {
   deleteUser,
   sendOtp,
   getTotalUser,
+  makeAdmin,
 } from "../controllers/user.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -36,4 +37,10 @@ router.get("/get-user-info", authentication, wrapAsync(getUserInfo));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
 router.get("/total-user", authentication, isAdmin, wrapAsync(getTotalUser));
+router.patch(
+  "/make-admin/:userid",
+  authentication,
+  isAdmin,
+  wrapAsync(makeAdmin)
+);
 export default router;
