@@ -17,6 +17,7 @@ import {
   sendOtp,
   getTotalUser,
   makeAdmin,
+  editUser,
 } from "../controllers/user.controller.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 const router = express.Router();
@@ -37,6 +38,7 @@ router.get("/get-user-info", authentication, wrapAsync(getUserInfo));
 router.get("/search", authentication, isAdmin, wrapAsync(search));
 router.delete("/delete-user", authentication, isAdmin, wrapAsync(deleteUser));
 router.get("/total-user", authentication, isAdmin, wrapAsync(getTotalUser));
+router.put("/update-user/:id", authentication, isAdmin, wrapAsync(editUser));
 router.patch(
   "/make-admin/:userid",
   authentication,
