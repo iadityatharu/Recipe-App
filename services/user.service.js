@@ -43,7 +43,7 @@ export const getUserRole = async (userId) => {
   return user;
 };
 export const editUser = async (userId, updatedUser) => {
-  const { firstname, middlename, lastname, email, phone, address } =
+  const { firstname, middlename, lastname, email, phone, role, address } =
     updatedUser;
   const user = await User.findById(userId);
   if (!user) {
@@ -54,6 +54,7 @@ export const editUser = async (userId, updatedUser) => {
     lastname,
     email,
     phone,
+    role,
     address,
     ...(middlename && { middlename }),
   };
