@@ -58,7 +58,6 @@ export const editUser = async (userId, updatedUser) => {
     ...(middlename && { middlename }),
   };
   await User.findByIdAndUpdate(userId, updatedData);
-
   return { status: 200, message: "User updated successfully" };
 };
 
