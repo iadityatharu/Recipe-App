@@ -122,12 +122,12 @@ export const getTotalUser = async () => {
   }
   return count;
 };
-export const makeAdmin = async (userId) => {
+export const makeAdmin = async (userId, Role) => {
   const user = await User.findById(userId);
   if (!user) {
     return { status: 404, message: "User not found" };
   }
-  user.role = "admin";
+  user.role = Role;
   await user.save();
 
   return { status: 200, message: "Admin created successfully" };
