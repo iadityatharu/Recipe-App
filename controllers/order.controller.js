@@ -59,7 +59,6 @@ export const orderHistory = async (req, res) => {
 };
 export const getAllOrder = async (req, res) => {
   const orders = await getAllOrderService();
-  console.log(orders);
   if (!orders || orders.length === 0) {
     throw new expressError(404, "No orders found");
   }
