@@ -10,6 +10,7 @@ import { getUserInfo as getUserInfoService } from "../services/user.service.js";
 import { deleteUser as deleteUserService } from "../services/user.service.js";
 import { getAllUsers as getAllUsersService } from "../services/user.service.js";
 import { getTotalUser as getTotalUserService } from "../services/user.service.js";
+import { getUserById as getUserByIdService } from "../services/user.service.js";
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
@@ -78,6 +79,15 @@ export const getAllUsers = async (req, res) => {
     throw new expressError(404, "user not found");
   }
   return res.status(200).json(response);
+};
+export const getUserById = async (req, res) => {
+  const { userId } = req.params;
+  const user = await getUserByIdService(userId);
+
+  if (!user) {
+    return res.status(404).json({ status: 404, message: "User not found" });
+  }
+  return res.status(200).json({ status: 200, data: user });
 };
 export const getUserInfo = async (req, res) => {
   const userId = req.user.authClaims.id;

@@ -61,6 +61,13 @@ export const editUser = async (userId, updatedUser) => {
   await User.findByIdAndUpdate(userId, updatedData);
   return { status: 200, message: "User updated successfully" };
 };
+export const getUserById = async (userId) => {
+  const user = await User.findById(userId).select("-password -otp");
+  if (!user) {
+    return { status: 404 };
+  }
+  return user;
+};
 
 export const getAllUsers = async () => {
   const users = await User.find().select("-password  -otp");
