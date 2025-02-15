@@ -13,6 +13,7 @@ import { getTotalUser as getTotalUserService } from "../services/user.service.js
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
+import { makeAdmin as makeAdminService } from "../services/user.service.js";
 export const signup = async (req, res) => {
   const validUser = req.validUser;
   const response = await signupService(validUser);
@@ -142,5 +143,12 @@ export const search = async (req, res) => {
 };
 export const getTotalUser = async (req, res) => {
   const total = await getTotalUserService();
-  return res.status(200).json({status:200, data: total });
+  return res.status(200).json({ status: 200, data: total });
+};
+
+export const makeAdmin = async (req, res) => {
+  const { userid } = req.query;
+  const { Role } = req.body;
+  const response = await makeAdminService(userid, Role);
+  return res.status(200).json({ status: 200, message: response });
 };
