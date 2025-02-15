@@ -13,6 +13,7 @@ import { getTotalUser as getTotalUserService } from "../services/user.service.js
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
+import { editUser as editUserService } from "../services/userService";
 import { makeAdmin as makeAdminService } from "../services/user.service.js";
 export const signup = async (req, res) => {
   const validUser = req.validUser;
@@ -49,6 +50,18 @@ export const signin = async (req, res) => {
     message: "Signin successful",
     role: response.role,
   });
+};
+export const editUser = async (req, res) => {
+  const userId = req.params.id;
+  const updatedUser = req.body;
+  const result = await editUserService(userId, updatedUser);
+  if (result.status === 200) {
+    return res.status(200).json({ message: result.message });
+  } else {
+    return res
+      .status(result.status)
+      .json({ message: result.message || "An error occurred" });
+  }
 };
 export const getUserRole = async (req, res) => {
   const userId = req.user.authClaims.id;
