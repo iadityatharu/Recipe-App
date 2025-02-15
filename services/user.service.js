@@ -43,16 +43,12 @@ export const getUserRole = async (userId) => {
   return user;
 };
 export const editUser = async (userId, updatedUser) => {
-  const { firstname, middlename, lastname, password, email, phone, address } =
+  const { firstname, middlename, lastname,email, phone, address } =
     updatedUser;
-
-  // Find user by ID or email (whichever is available)
   const user = await User.findById(userId);
   if (!user) {
     return { status: 404, message: "User not found" };
   }
-
-  // If password is being updated, hash it before saving
   let updatedData = {
     firstname,
     lastname,
@@ -61,15 +57,7 @@ export const editUser = async (userId, updatedUser) => {
     address,
     ...(middlename && { middlename }),
   };
-
-  if (password) {
-    const hashPassword = await bcrypt.hash(password, 10);
-    updatedData.password = hashPassword;
-  }
-
-  // Update user details
   await User.findByIdAndUpdate(userId, updatedData);
-
   return { status: 200, message: "User updated successfully" };
 };
 export const getAllUsers = async () => {
