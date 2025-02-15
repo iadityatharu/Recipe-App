@@ -13,7 +13,7 @@ import { getTotalUser as getTotalUserService } from "../services/user.service.js
 import { accessExpiry } from "../constant.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../function/generateOtp.js";
-import { editUser as editUserService } from "../services/userService";
+import { editUser as editUserService } from "../services/user.service.js";
 import { makeAdmin as makeAdminService } from "../services/user.service.js";
 export const signup = async (req, res) => {
   const validUser = req.validUser;
