@@ -9,14 +9,18 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
     if (!userId || !recipeIds.length || !paymentMethodId) {
       throw new Error("Missing required fields");
     }
+
     const user = await User.findById(userId).select(
       "firstname middlename lastname email phone address orders"
     );
     if (!user) throw new Error("User not found");
+
     const recipes = await Recipe.find({ _id: { $in: recipeIds } });
     if (recipes.length !== recipeIds.length)
       throw new Error("One or more recipes not found");
+
     const totalAmount = recipes.reduce((sum, recipe) => sum + recipe.price, 0);
+
     const paymentIntent = await stripeInstance.paymentIntents.create({
       amount: totalAmount * 100,
       currency: "usd",
@@ -31,9 +35,11 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
     if (paymentIntent.status !== "succeeded") {
       throw new Error("Payment failed");
     }
+
     const username = [user.firstname, user.middlename, user.lastname]
       .filter(Boolean)
       .join(" ");
+
     const newOrder = new Order({
       user: userId,
       recipe: recipeIds,
@@ -49,14 +55,26 @@ export const placeOrder = async (userId, recipeIds, paymentMethodId) => {
       },
       status: "purchased",
     });
+
     await newOrder.save();
+
     await User.findByIdAndUpdate(userId, {
       $pull: { carts: { $in: recipeIds } },
       $push: { orders: newOrder._id },
     });
+
+    const recipeDetails = recipes.map((recipe) => ({
+      title: recipe.title,
+      price: recipe.price,
+    }));
+
     return {
       success: true,
       message: "Order placed successfully",
+      orderDetails: {
+        recipes: recipeDetails,
+        totalAmount: totalAmount,
+      },
     };
   } catch (error) {
     return { success: false, message: error.message };
