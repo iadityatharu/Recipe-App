@@ -39,6 +39,7 @@ export const placeOrder = async (req, res) => {
     return res.status(200).json({
       status: 200,
       message: orderResponse.message,
+      data: orderResponse.orderDetails,
     });
   } catch (error) {
     return res.status(error.statusCode || 500).json({
@@ -58,6 +59,7 @@ export const orderHistory = async (req, res) => {
 };
 export const getAllOrder = async (req, res) => {
   const orders = await getAllOrderService();
+  console.log(orders);
   if (!orders || orders.length === 0) {
     throw new expressError(404, "No orders found");
   }
