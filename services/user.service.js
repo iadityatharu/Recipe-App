@@ -43,7 +43,7 @@ export const getUserRole = async (userId) => {
   return user;
 };
 export const editUser = async (userId, updatedUser) => {
-  const { firstname, middlename, lastname,email, phone, address } =
+  const { firstname, middlename, lastname, email, phone, address } =
     updatedUser;
   const user = await User.findById(userId);
   if (!user) {
@@ -58,8 +58,10 @@ export const editUser = async (userId, updatedUser) => {
     ...(middlename && { middlename }),
   };
   await User.findByIdAndUpdate(userId, updatedData);
+
   return { status: 200, message: "User updated successfully" };
 };
+
 export const getAllUsers = async () => {
   const users = await User.find().select("-password  -otp");
   if (users.length === 0) {
