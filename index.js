@@ -6,7 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import limitter from "express-rate-limit";
 import { connection } from "./config/connection.config.js";
-import { expressError } from "./utils/ExpressError.js";
+import { expressError } from "./utils/expressError.js";
 import { missingVar } from "./function/checkEnv.js";
 import indexRoute from "./routes/wraperRoute.route.js";
 const app = express();
