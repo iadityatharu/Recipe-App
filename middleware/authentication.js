@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { expressError } from "../utils/ExpressError.js";
+import { expressError } from "../utils/expressError.js";
 export const authentication = (req, res, next) => {
   const token = req.cookies.accessToken;
   if (!token) {
