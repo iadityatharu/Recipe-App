@@ -1,5 +1,5 @@
 import { validateUser } from "../joi.js";
-import { expressError } from "../utils/ExpressError.js";
+import { expressError } from "../utils/expressError.js";
 export const validUser = async (req, res, next) => {
   try {
     const { error, value: validUser } = validateUser.validate(req.body);
