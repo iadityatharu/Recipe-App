@@ -41,9 +41,10 @@ export const signin = async (req, res) => {
     throw new expressError(403, "Invalid Credentials");
   }
   res.cookie("accessToken", response.newAccessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
+    httpOnly: true,   
+  secure: true,     
+  sameSite: "None",
+  domain: "recipe-app-frontend-4thsem.vercel.app", 
     expires: accessExpiry,
   });
   return res.status(200).json({
