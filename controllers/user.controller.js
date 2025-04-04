@@ -42,11 +42,11 @@ export const signin = async (req, res) => {
   }
   console.log(response.newAccessToken);
   res.cookie("accessToken", response.newAccessToken, {
-    httpOnly: true,   
-  secure: true,     
-  sameSite: "None",
-  domain: "recipe-app-frontend-4thsem.vercel.app", 
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
     expires: accessExpiry,
+    path: "/",
   });
   return res.status(200).json({
     status: 200,
