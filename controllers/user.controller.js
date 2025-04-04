@@ -42,7 +42,7 @@ export const signin = async (req, res) => {
   }
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,
-    secure: false,
+    secure: true,
     sameSite: "Strict",
     expires: accessExpiry,
   });
