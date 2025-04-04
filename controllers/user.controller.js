@@ -40,6 +40,7 @@ export const signin = async (req, res) => {
   } else if (response.status === 403) {
     throw new expressError(403, "Invalid Credentials");
   }
+  console.log(response.newAccessToken);
   res.cookie("accessToken", response.newAccessToken, {
     httpOnly: true,   
   secure: true,     
