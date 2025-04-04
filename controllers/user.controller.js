@@ -46,6 +46,7 @@ export const signin = async (req, res) => {
     secure: true,
     sameSite: "None",
     expires: accessExpiry,
+    path:"/"
   });
   return res.status(200).json({
     status: 200,
