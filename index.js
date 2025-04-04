@@ -18,6 +18,7 @@ app.use(
   cors({
     origin: "https://recipe-app-frontend-4thsem.vercel.app",
     credentials: true,
+    exposedHeaders: ["set-cookie"]
   })
 );
 app.use(express.json());
