@@ -55,6 +55,7 @@ export const getRecentRecipe = async () => {
     .select("_id images title price")
     .sort({ createdAt: -1 })
     .limit(4);
+  console.log(recipes);
   return recipes;
 };
 export const getSpecificRecipe = async (userId, recipeId, role) => {
