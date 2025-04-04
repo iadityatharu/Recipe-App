@@ -101,11 +101,22 @@ export const getUserInfo = async (req, res) => {
 };
 export const logout = async (req, res) => {
   const incomingAccessToken = req.cookies.accessToken;
+  
   if (!incomingAccessToken) {
     throw new expressError(401, "Invalid Tokens");
   }
-  res.clearCookie("accessToken", incomingAccessToken);
-  res.status(200).json({ status: 200, message: "logout successfull" });
+
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    path: "/",
+  });
+
+  res.status(200).json({ 
+    status: 200, 
+    message: "Logout successful" 
+  });
 };
 export const sendOtp = async (req, res) => {
   const { email } = req.body;
