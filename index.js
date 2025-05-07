@@ -16,7 +16,7 @@ missingVar();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://recipe-app-frontend-4thsem.vercel.app",
+    origin: "https://www.adityatharu.com.np",
     credentials: true,
     exposedHeaders: ["set-cookie"]
   })
